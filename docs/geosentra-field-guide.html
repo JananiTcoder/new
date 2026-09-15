@@ -1,0 +1,1017 @@
+<title>GEOSENTRA Field Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --ink:#101826; --ink-soft:#3c4b52; --paper:#eef2f1; --surface:#ffffff;
+    --accent:#0e7c86; --accent-strong:#0b5f67; --accent-wash:#e2f0ee;
+    --line:#d7dedc; --line-soft:#e6eae8;
+    --low:#1f7a4d; --low-wash:#e5f3ea;
+    --mod:#a86a12; --mod-wash:#faf0dd;
+    --high:#b14a1f; --high-wash:#fbe9df;
+    --crit:#8f2116; --crit-wash:#f8e2df;
+    --info:#2a5f8f; --info-wash:#e4eef7;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#e7efec; --ink-soft:#aebdb8; --paper:#0a1412; --surface:#101c19;
+      --accent:#39ccd4; --accent-strong:#7fe3e8; --accent-wash:#0f2b2b;
+      --line:#20302c; --line-soft:#182420;
+      --low:#4fbf87; --low-wash:#0f2a1d;
+      --mod:#e0a94a; --mod-wash:#2c220e;
+      --high:#e88a5c; --high-wash:#2e1a10;
+      --crit:#f0796a; --crit-wash:#301210;
+      --info:#7db3e0; --info-wash:#122234;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#e7efec; --ink-soft:#aebdb8; --paper:#0a1412; --surface:#101c19;
+    --accent:#39ccd4; --accent-strong:#7fe3e8; --accent-wash:#0f2b2b;
+    --line:#20302c; --line-soft:#182420;
+    --low:#4fbf87; --low-wash:#0f2a1d;
+    --mod:#e0a94a; --mod-wash:#2c220e;
+    --high:#e88a5c; --high-wash:#2e1a10;
+    --crit:#f0796a; --crit-wash:#301210;
+    --info:#7db3e0; --info-wash:#122234;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size:15.5px; line-height:1.62;
+  }
+  code, .mono, .path, kbd{
+    font-family:"IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+    font-size:0.88em;
+  }
+  h1,h2,h3,h4{
+    font-family:"Fraunces", Georgia, serif; font-weight:600; color:var(--ink);
+    text-wrap:balance; letter-spacing:-0.01em;
+  }
+  a{color:var(--accent-strong);}
+  a:focus-visible, button:focus-visible, summary:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+  img{max-width:100%;}
+
+  /* ---- shell layout ---- */
+  .shell{display:flex; min-height:100vh;}
+  .toc{
+    width:280px; flex:none; position:sticky; top:0; align-self:flex-start;
+    height:100vh; overflow-y:auto; padding:28px 20px 40px;
+    border-right:1px solid var(--line); background:var(--surface);
+  }
+  .toc-brand{display:flex; align-items:center; gap:10px; margin-bottom:22px;}
+  .toc-brand .mark{
+    width:34px; height:34px; border-radius:9px; background:var(--accent);
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .toc-brand .mark svg{width:19px; height:19px;}
+  .toc-brand .name{font-family:"Fraunces",serif; font-weight:700; font-size:1.05rem; letter-spacing:0.01em;}
+  .toc-brand .sub{font-size:0.68rem; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.08em; margin-top:1px;}
+  .toc nav{display:flex; flex-direction:column; gap:1px;}
+  .toc a{
+    display:flex; gap:10px; padding:6.5px 10px; border-radius:7px; text-decoration:none;
+    color:var(--ink-soft); font-size:0.84rem; line-height:1.35;
+  }
+  .toc a:hover{background:var(--accent-wash); color:var(--ink);}
+  .toc a .num{font-family:"IBM Plex Mono",monospace; color:var(--accent-strong); font-size:0.78em; flex:none; padding-top:0.1em;}
+  .toc-foot{margin-top:22px; padding-top:16px; border-top:1px solid var(--line-soft); font-size:0.72rem; color:var(--ink-soft);}
+
+  .toc-toggle{display:none;}
+
+  main{flex:1; min-width:0; padding:52px clamp(20px,5vw,72px) 100px;}
+  .doc{max-width:920px; margin:0 auto;}
+
+  .cover{margin-bottom:56px;}
+  .cover .eyebrow{
+    font-family:"IBM Plex Mono",monospace; text-transform:uppercase; letter-spacing:0.14em;
+    font-size:0.72rem; color:var(--accent-strong); margin-bottom:14px;
+  }
+  .cover h1{font-size:clamp(2.1rem,4.2vw,3.1rem); line-height:1.06; margin:0 0 16px;}
+  .cover .dek{font-size:1.05rem; color:var(--ink-soft); max-width:62ch; margin:0 0 22px;}
+  .cover .facts{display:flex; flex-wrap:wrap; gap:10px;}
+  .fact{
+    border:1px solid var(--line); background:var(--surface); border-radius:9px;
+    padding:8px 13px; font-size:0.8rem; display:flex; gap:7px; align-items:baseline;
+  }
+  .fact b{font-family:"Fraunces",serif; font-size:1rem; color:var(--ink);}
+  .fact span{color:var(--ink-soft);}
+
+  section.block{margin:0 0 60px; scroll-margin-top:22px;}
+  .block-head{display:flex; align-items:baseline; gap:14px; margin-bottom:6px; padding-bottom:12px; border-bottom:2px solid var(--ink);}
+  .block-head .idx{font-family:"IBM Plex Mono",monospace; color:var(--accent-strong); font-size:0.95rem; font-weight:600;}
+  .block-head h2{margin:0; font-size:1.55rem;}
+  .lede{color:var(--ink-soft); max-width:70ch; margin:14px 0 24px; font-size:0.98rem;}
+
+  h3{font-size:1.18rem; margin:30px 0 10px;}
+  h4{font-size:1rem; margin:20px 0 8px; color:var(--accent-strong); font-family:"IBM Plex Sans",sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:0.03em; font-size:0.78rem;}
+  p{margin:0 0 12px; max-width:72ch;}
+  ul, ol{margin:0 0 14px; padding-left:1.35em;}
+  li{margin-bottom:5px; max-width:70ch;}
+  strong{color:var(--ink); font-weight:600;}
+
+  /* status chips */
+  .chip{
+    display:inline-flex; align-items:center; gap:5px; padding:2.5px 9px; border-radius:100px;
+    font-size:0.72rem; font-weight:600; white-space:nowrap; line-height:1.6;
+  }
+  .chip.good{background:var(--low-wash); color:var(--low);}
+  .chip.warn{background:var(--mod-wash); color:var(--mod);}
+  .chip.bad{background:var(--high-wash); color:var(--high);}
+  .chip.crit{background:var(--crit-wash); color:var(--crit);}
+  .chip.info{background:var(--info-wash); color:var(--info);}
+  .chip.mock{background:var(--accent-wash); color:var(--accent-strong);}
+  .chip.miss{background:var(--line-soft); color:var(--ink-soft);}
+
+  /* role cards */
+  .role-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px; margin:18px 0 8px;}
+  .role-card{
+    border:1px solid var(--line); border-left:4px solid var(--accent); background:var(--surface);
+    border-radius:10px; padding:18px 18px 16px;
+  }
+  .role-card h4{margin-top:0; font-size:1rem; color:var(--ink); text-transform:none; letter-spacing:0; font-family:"Fraunces",serif; font-weight:600;}
+  .role-card .tag{font-size:0.72rem; color:var(--ink-soft); margin-bottom:10px;}
+  .role-card dl{margin:0; font-size:0.86rem;}
+  .role-card dt{font-weight:600; color:var(--ink-soft); font-size:0.7rem; text-transform:uppercase; letter-spacing:0.04em; margin-top:10px;}
+  .role-card dd{margin:2px 0 0;}
+
+  /* tables */
+  .twrap{overflow-x:auto; margin:16px 0 26px; border:1px solid var(--line); border-radius:10px;}
+  table{border-collapse:collapse; width:100%; font-size:0.86rem; background:var(--surface);}
+  th, td{text-align:left; padding:9px 13px; border-bottom:1px solid var(--line-soft); vertical-align:top;}
+  th{
+    background:var(--accent-wash); color:var(--accent-strong); font-size:0.7rem; text-transform:uppercase;
+    letter-spacing:0.04em; font-weight:700; white-space:nowrap;
+  }
+  tr:last-child td{border-bottom:none;}
+  td .path{color:var(--accent-strong);}
+
+  /* page-detail cards */
+  .page-card{
+    border:1px solid var(--line); border-radius:12px; background:var(--surface);
+    padding:22px 24px 18px; margin:0 0 22px;
+  }
+  .page-card summary{
+    cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between; gap:14px;
+  }
+  .page-card summary::-webkit-details-marker{display:none;}
+  .page-card summary .ptitle{display:flex; align-items:baseline; gap:11px; flex-wrap:wrap;}
+  .page-card summary h3{margin:0; font-size:1.14rem;}
+  .page-card summary .caret{flex:none; transition:transform 0.15s ease; color:var(--ink-soft);}
+  .page-card[open] summary .caret{transform:rotate(90deg);}
+  .page-card .body{padding-top:16px; border-top:1px solid var(--line-soft); margin-top:14px;}
+  .meta-row{display:flex; flex-wrap:wrap; gap:7px; margin:8px 0 4px;}
+  .kv{display:grid; grid-template-columns:120px 1fr; gap:8px 16px; font-size:0.88rem; margin:10px 0;}
+  .kv dt{color:var(--ink-soft); font-weight:600; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.03em; padding-top:2px;}
+  .kv dd{margin:0;}
+
+  .callout{
+    border-radius:10px; padding:13px 16px; margin:14px 0; font-size:0.87rem; border:1px solid;
+  }
+  .callout.note{background:var(--accent-wash); border-color:var(--accent); color:var(--ink);}
+  .callout.flag{background:var(--mod-wash); border-color:var(--mod); color:var(--ink);}
+  .callout.miss{background:var(--line-soft); border-color:var(--line); color:var(--ink-soft);}
+
+  /* journey timeline */
+  .journey{position:relative; padding-left:26px; margin:18px 0 10px;}
+  .journey::before{content:""; position:absolute; left:8px; top:6px; bottom:6px; width:2px; background:var(--line);}
+  .jstep{position:relative; margin-bottom:20px;}
+  .jstep::before{
+    content:""; position:absolute; left:-26px; top:3px; width:11px; height:11px; border-radius:50%;
+    background:var(--surface); border:2.5px solid var(--accent);
+  }
+  .jstep h4{margin:0 0 4px; text-transform:none; letter-spacing:0; font-size:0.98rem; color:var(--ink); font-family:"Fraunces",serif; font-weight:600;}
+  .jstep p{font-size:0.9rem; margin:0;}
+
+  /* map cards */
+  .map-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin:18px 0;}
+  .map-card{border:1px solid var(--line); border-radius:12px; background:var(--surface); padding:18px 20px;}
+  .map-card h4{margin-top:0; text-transform:none; letter-spacing:0; font-size:1rem; color:var(--ink); font-family:"Fraunces",serif; font-weight:600;}
+  .map-card ul{margin:8px 0 0; padding-left:1.1em; font-size:0.86rem;}
+
+  /* checklist */
+  .checklist{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2px 20px; margin:16px 0;}
+  .check-item{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:8px 0; border-bottom:1px solid var(--line-soft); font-size:0.87rem;
+  }
+
+  .flow-num{
+    display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%;
+    background:var(--ink); color:var(--paper); font-family:"IBM Plex Mono",monospace; font-size:0.72rem; font-weight:600;
+    flex:none; margin-right:9px;
+  }
+  .flow-item{display:flex; align-items:flex-start; margin-bottom:9px; font-size:0.92rem;}
+
+  .glossary dt{font-family:"Fraunces",serif; font-weight:600; font-size:1rem; color:var(--ink); margin-top:16px;}
+  .glossary dd{margin:3px 0 0; font-size:0.9rem; color:var(--ink-soft); max-width:66ch;}
+  .glossary dd b{color:var(--ink);}
+
+  footer.endnote{margin-top:70px; padding-top:22px; border-top:1px solid var(--line); font-size:0.82rem; color:var(--ink-soft);}
+
+  @media (max-width:880px){
+    .shell{flex-direction:column;}
+    .toc{
+      position:sticky; top:0; z-index:20; width:100%; height:auto; max-height:none;
+      border-right:none; border-bottom:1px solid var(--line); padding:14px 16px;
+    }
+    .toc nav{display:none; max-height:60vh; overflow-y:auto; margin-top:12px;}
+    .toc.open nav{display:flex;}
+    .toc-toggle{
+      display:flex; align-items:center; justify-content:space-between; width:100%;
+      background:none; border:none; padding:0; font-family:"IBM Plex Sans",sans-serif;
+      font-size:0.84rem; font-weight:600; color:var(--ink); cursor:pointer;
+    }
+    .toc-foot{display:none;}
+    main{padding:32px 18px 80px;}
+    .kv{grid-template-columns:1fr;}
+    .kv dt{padding-top:0;}
+  }
+</style>
+
+<div class="shell">
+  <aside class="toc" id="toc">
+    <button class="toc-toggle" id="tocToggle" aria-expanded="false">
+      <span style="display:flex;align-items:center;gap:10px;">
+        <span class="mark" style="width:26px;height:26px;"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10V6l-8-4z" stroke="white" stroke-width="1.6"/></svg></span>
+        Field Guide contents
+      </span>
+      <span aria-hidden="true">▾</span>
+    </button>
+    <div class="toc-brand" id="tocBrandDesktop">
+      <span class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10V6l-8-4z" stroke="white" stroke-width="1.6"/></svg></span>
+      <div>
+        <div class="name">GEOSENTRA</div>
+        <div class="sub">Field Guide</div>
+      </div>
+    </div>
+    <nav>
+      <a href="#s1"><span class="num">01</span> GEOSENTRA in one paragraph</a>
+      <a href="#s2"><span class="num">02</span> The problem it solves</a>
+      <a href="#s-usp"><span class="num">USP</span> Unique selling proposition</a>
+      <a href="#s-feasibility"><span class="num">FEAS</span> Feasibility</a>
+      <a href="#s3"><span class="num">03</span> Who uses it</a>
+      <a href="#s4"><span class="num">04</span> Login &amp; roles</a>
+      <a href="#s5"><span class="num">05</span> Complete page list</a>
+      <a href="#s6"><span class="num">06</span> Every page, in depth</a>
+      <a href="#s7"><span class="num">07</span> The complete working flow</a>
+      <a href="#s8"><span class="num">08</span> Map interaction flow</a>
+      <a href="#s9"><span class="num">09</span> Risk &amp; capacity terms</a>
+      <a href="#s10"><span class="num">10</span> Role-wise journeys</a>
+      <a href="#s11"><span class="num">11</span> Real-world workflow</a>
+      <a href="#s12"><span class="num">12</span> Implementation reality</a>
+      <a href="#s13"><span class="num">13</span> Real vs. simulated vs. missing</a>
+      <a href="#s14"><span class="num">14</span> Page-by-page summary</a>
+      <a href="#s15"><span class="num">15</span> Feature checklist</a>
+      <a href="#s16"><span class="num">16</span> What's needed next</a>
+      <a href="#s17"><span class="num">17</span> Conclusion</a>
+    </nav>
+    <div class="toc-foot">Frontend-only prototype review<br>Smart India Hackathon · SIH26191</div>
+  </aside>
+
+  <main>
+    <div class="doc">
+
+      <div class="cover">
+        <div class="eyebrow">Non-technical application walkthrough</div>
+        <h1>How GEOSENTRA actually works, page by page</h1>
+        <p class="dek">A complete inspection of the GEOSENTRA codebase, written for a government officer, a disaster-management official, a hackathon judge, or anyone who needs to understand — and honestly represent — exactly what this prototype does today, and what it does not do yet.</p>
+        <div class="facts">
+          <div class="fact"><b>4</b><span>login roles</span></div>
+          <div class="fact"><b>15</b><span>routes, plus 1 dynamic detail route</span></div>
+          <div class="fact"><b>6</b><span>maps across the app</span></div>
+          <div class="fact"><b>8</b><span>habitations tracked</span></div>
+          <div class="fact"><b>6</b><span>safe sites tracked</span></div>
+          <div class="fact"><b>0</b><span>backend connections</span></div>
+        </div>
+      </div>
+
+      <!-- ============ 1 ============ -->
+      <section class="block" id="s1">
+        <div class="block-head"><span class="idx">01</span><h2>GEOSENTRA in one paragraph</h2></div>
+        <p>GEOSENTRA is a disaster-intelligence and relocation-planning application. It is built to help a disaster authority see which populated areas ("habitations") are at risk from landslide, flood, coastal erosion or cloudburst; understand who lives there and how vulnerable they are; find and evaluate safe places to move people to; plan the safest travel route for that move, tailored to who is travelling; and keep a record of every decision made along the way. Right now, everything in the application — every map, every number, every risk score — is a working frontend prototype running on realistic but invented data. There is no live backend, no live sensor feed, and no trained machine-learning model behind any of it. The value of what exists today is that the full decision-making <em>experience</em> is real and usable: the screens, the navigation, the role permissions, and the underlying calculation logic are all genuinely built and tested — they are simply fed by carefully constructed example data instead of a live government data feed.</p>
+      </section>
+
+      <!-- ============ 2 ============ -->
+      <section class="block" id="s2">
+        <div class="block-head"><span class="idx">02</span><h2>What problem the application solves</h2></div>
+        <p>In a disaster, the hardest questions are rarely "is there a hazard?" — they are: <strong>which specific communities are actually in danger right now, how many people, of what kind, need to move, where can they safely go, and how do they get there without walking into a second hazard?</strong> Answering these questions well requires combining several kinds of information that are normally scattered across different departments and paper records: hazard maps, population and vulnerability records, the physical capacity of relief camps and relocation sites, and road conditions.</p>
+        <p>GEOSENTRA's design goal is to bring all of that into one connected screen, so that a decision like "relocate Kovalam East to the Community Development Zone" is backed by a visible, explainable chain of reasoning — risk score, population profile, site capacity, distance and route safety — instead of being made from memory or a phone call. The prototype demonstrates <em>how that connected decision screen would work</em>, using realistic mock data in place of the live feeds a production deployment would eventually need.</p>
+      </section>
+
+      <!-- ============ USP ============ -->
+      <section class="block" id="s-usp">
+        <div class="block-head"><span class="idx">USP</span><h2>Unique Selling Proposition</h2></div>
+        <p class="lede">Most disaster-management tools actually available to a district or state today are one of two things: a static hazard map with no connection to who lives in the affected area, or a records system with no map at all. GEOSENTRA's differentiator isn't any one feature — it's that the pages below hand off to each other, so one browsing session can go from "where is the hazard" to "who is affected" to "where can they go" to "how do they get there," without switching tools. Every point below is something the current frontend does today, not a planned feature.</p>
+
+        <h3>A. A unified disaster-management interface</h3>
+        <p>Overview, Hazard Intelligence, Habitations, Safe Sites, Route Intelligence, Institution / Evacuation, and All Relocations Across India share the same underlying habitation, safe-site and risk data — a number shown on Overview always agrees with what Habitations and Safe Sites show for the same place.</p>
+
+        <h3>B. Hazard-to-habitation navigation is a real click path</h3>
+        <p>A hazard map checkpoint, a name inside the High Risk box, and a name inside the Moderate Risk box all call the same navigation logic and land on that exact habitation's own detail page — confirmed by clicking different items and getting different, correct destinations.</p>
+
+        <h3>C. Relocation-aware Route Intelligence</h3>
+        <p>Selecting a record on All Relocations Across India — or a habitation, safe site, or evacuation group elsewhere — opens Route Intelligence pre-loaded with <em>that specific</em> source and destination, not a fixed example pair. The route itself is generated locally between two real coordinates, on the current frontend/mock implementation, not returned by a live routing service.</p>
+
+        <h3>D. Visual risk prioritization</h3>
+        <p>Risk is colour-coded consistently everywhere: red for the High Risk box and Critical/High-Risk badges, orange/amber for the Moderate Risk box and Watch-tier badges, green for Normal/Low tier — and safe sites render as a distinct green box marker so they can't be mistaken for any other marker type at a glance.</p>
+
+        <h3>E. Map-based decision support</h3>
+        <p>The maps let a user see hazard zones, habitations, safe sites, and — on Route Intelligence and the National Relocations map — relocation routes together, and click through to detail on any of them. This supports planning and review; it is not live emergency navigation — there is no GPS, no live traffic, and no real routing engine, and the app says so on-screen.</p>
+
+        <h3>F. A role-oriented workflow</h3>
+        <p>Exactly four login roles are implemented — Disaster Authority, Volunteers, Citizen, and Emergency Coordinator — each with a different Overview dashboard and a different, permission-checked set of pages (see <a href="#s4">Section 04</a>), so a citizen and an authority are never shown the same screen.</p>
+
+        <h3>G. Frontend-first and cost-conscious</h3>
+        <p>The entire experience above runs on existing frontend components, mock data, and free OpenStreetMap tiles — no backend, no database, and no paid API required to build or demonstrate it. That keeps it cheap to build and easy to evaluate, while being honest that it is not yet production-ready (see <a href="#s-feasibility">Feasibility</a>, next).</p>
+
+        <div class="callout note">GEOSENTRA's core USP is the integration of hazard awareness, habitation-level risk detail, safe-site identification with real capacity limits, and source-to-destination route intelligence into one role-aware, click-through disaster-management frontend — demonstrated end-to-end today on mock data, and structured so a real backend and live data sources can be substituted in later without redesigning the interface.</div>
+      </section>
+
+      <!-- ============ Feasibility ============ -->
+      <section class="block" id="s-feasibility">
+        <div class="block-head"><span class="idx">FEAS</span><h2>Feasibility</h2></div>
+        <p class="lede">Can GEOSENTRA realistically be built, demonstrated, and grown? This section separates what's already proven by the running prototype from what production use would still require.</p>
+
+        <h3>A. Technical feasibility</h3>
+        <p>Not aspirational — every page, map, risk category and route-display flow described in this document is already running in the deployed prototype, built entirely from React 19, Vite, react-router-dom v7, Leaflet/react-leaflet on free OpenStreetMap tiles, Tailwind CSS v4, and three React Contexts for state (no external state library needed at this size). Source control is GitHub; hosting is Vercel — both already in active use for this project.</p>
+
+        <h3>B. Operational feasibility</h3>
+        <p>A user can already move through the full intended workflow: role-specific Overview → identify Low/Moderate/High/Critical habitations → open a habitation's full detail → compare safe sites against real capacity limits → review relocation records → open a source-to-destination route. Colour-coded risk, clickable markers and risk boxes, and a role-filtered menu make this usable today for review, training and demonstration. It has not been tested with real disaster-authority staff or emergency teams, and no government or emergency body is claimed to be using it.</p>
+
+        <h3>C. Economic feasibility</h3>
+        <p>Cost-conscious by construction: open-source frontend tools, free map tiles with no billing account, GitHub, and Vercel — no backend, database, or paid API needed to build or demonstrate the current prototype. A future production deployment would add real costs this document does not estimate — backend hosting, a managed database, live hazard/routing data licensing, authentication infrastructure, monitoring, and higher map-tile usage — because no such figures currently exist in this project's documentation.</p>
+
+        <h3>D. Schedule feasibility</h3>
+        <p>Built incrementally, and the repository history reflects it: (1) interface &amp; navigation, (2) map &amp; markers, (3) hazard &amp; habitation interactions, (4) safe-site visualization, (5) relocation records, (6) Route Intelligence integration, (7) responsive/testing pass — all <strong>done</strong>. (8) Backend &amp; live-data integration is a <strong>future phase</strong>, not started.</p>
+
+        <h3>E. Scalability feasibility — future enhancements, not current features</h3>
+        <p>Backend integration and a real database, live hazard data feeds, IoT/sensor integration, a trained ML risk model, dedicated authority dashboards, citizen reporting, real push/SMS/email notifications, offline support, multilingual support, more Indian regions, real-time traffic-aware routing, persistent audit logging, and finer-grained role permissions.</p>
+
+        <h3>F. Legal, security and data feasibility</h3>
+        <p>The current session is a mock, local-only login with no password and no server check — appropriate for a demo, not for production. Real deployment would need secure authentication, server-enforced role-based access control, protection of sensitive location/population data, secure API communication, input validation, documented privacy practices, verified data sources, backup/recovery, and persistent audit logging. This prototype should not be presented or deployed as an official emergency-response system until that work is done.</p>
+
+        <div class="callout note"><strong>Overall conclusion:</strong> GEOSENTRA is technically feasible as a frontend prototype — that feasibility is demonstrated, not projected. The core workflow is built and working today on mock data, deployed via GitHub and Vercel, and structured to accept a real backend and live data later without a rewrite. Production or emergency use would additionally require the validation, data sourcing, and security work above, which has not yet been done.</div>
+
+        <div class="twrap">
+          <table><thead><tr><th>Feasibility area</th><th>Current status</th><th>Future requirement</th></tr></thead><tbody>
+            <tr><td>Technical</td><td>Pages, routing, maps, risk categories, relocation-to-route flow implemented and deployed</td><td>Backend and live-data integration</td></tr>
+            <tr><td>Operational</td><td>Role-filtered exploration of hazards, habitations, safe sites, relocation records</td><td>Real user testing and authority validation</td></tr>
+            <tr><td>Economic</td><td>Open-source frontend tools, free map tiles, GitHub, Vercel — no backend/paid API required</td><td>Production infrastructure and service costs (not yet estimated)</td></tr>
+            <tr><td>Schedule</td><td>Built incrementally across 7 completed phases</td><td>Additional phase for backend, live data, testing</td></tr>
+            <tr><td>Scalability</td><td>Page/data structure can hold more habitations, sites and records without a redesign</td><td>Database, real APIs, monitoring, optimisation</td></tr>
+            <tr><td>Security / data</td><td>Prototype-level mock authentication, browser-only session</td><td>Production authentication, authorization, privacy, security</td></tr>
+          </tbody></table>
+        </div>
+      </section>
+
+      <!-- ============ 3 ============ -->
+      <section class="block" id="s3">
+        <div class="block-head"><span class="idx">03</span><h2>Who uses GEOSENTRA</h2></div>
+        <p>The application is built around four distinct logged-in perspectives, each seeing a different dashboard and a different set of pages, plus the general public who can view the marketing page before choosing a role. The four roles are described fully in the next section; in short:</p>
+        <ul>
+          <li><strong>Disaster Authority</strong> — the decision-maker: the only role that can see literally everything, including national-level monitoring and audit records.</li>
+          <li><strong>Volunteers</strong> — people supporting relocation and shelter work on the ground.</li>
+          <li><strong>Citizen</strong> — a resident who wants to know if they're at risk and how to reach safety.</li>
+          <li><strong>Emergency Coordinator</strong> — the operational role running evacuation and movement during an active event.</li>
+        </ul>
+      </section>
+
+      <!-- ============ 4 ============ -->
+      <section class="block" id="s4">
+        <div class="block-head"><span class="idx">04</span><h2>Complete login and role explanation</h2></div>
+        <p class="lede">The code defines <strong>exactly four roles</strong>, confirmed directly in the authentication configuration file. There is no fifth hidden role and no separate admin account. Logging in is a simulated action: choosing a role card creates a local browser session with no password and no server check — this is stated explicitly on-screen on the role-selection page itself, and is not something this review is inferring.</p>
+
+        <div class="callout note"><strong>About the name "Institution."</strong> An earlier version of this project used "Institution" as the name of one of the four login roles. That role has since been fully renamed to <strong>Volunteers</strong> — not just the on-screen label, but the underlying role identifier the code uses internally as well. The word "Institution" still exists in the application today, but only as the name of a completely different, unrelated feature: the <span class="path">Institution / Evacuation</span> page, which manages evacuation planning for schools, colleges, hospitals, care homes and community centres. That page's name has nothing to do with the login role — it was never renamed because it was never the same thing. See page 10 in Section 6 for that feature in full.</div>
+
+        <div class="role-grid">
+          <div class="role-card">
+            <h4>Disaster Authority</h4>
+            <div class="tag">The command-centre decision-maker</div>
+            <dl>
+              <dt>Represents</dt><dd>A district disaster-management officer with full authority to plan and approve relocation.</dd>
+              <dt>Sees</dt><dd>The "Command Center Overview" dashboard — every statistic, the full operational map, and the decision-history feed.</dd>
+              <dt>Can access</dt><dd>All 12 in-app pages, including the two pages no other role can open: <strong>Audit Trail</strong> and <strong>All Relocations Across India</strong>.</dd>
+              <dt>Can do that others can't</dt><dd>Edit relocation allocation numbers; configure Risk Score thresholds in Settings; view the national relocation dataset.</dd>
+              <dt>Cannot do</dt><dd>Nothing is hidden from this role — it is the maximal permission set.</dd>
+            </dl>
+          </div>
+          <div class="role-card">
+            <h4>Volunteers</h4>
+            <div class="tag">People supporting relocation on the ground</div>
+            <dl>
+              <dt>Represents</dt><dd>A volunteer helping with logistics, supplies, and shelter support during an evacuation.</dd>
+              <dt>Sees</dt><dd>A "Volunteer Coordination Overview" dashboard framed around the institution they are currently supporting.</dd>
+              <dt>Can access</dt><dd>Overview, Hazard Intelligence, Safe Sites, Route Intelligence, Institution / Evacuation, Alerts, Settings — 7 pages.</dd>
+              <dt>Cannot access</dt><dd>Habitations (list or detail), Relocation, What-If Simulator, Audit Trail, All Relocations Across India.</dd>
+              <dt>Notable gap</dt><dd>Volunteers can view hazard and evacuation information, but the code has no dedicated "sign up to help," "claim a task" or "log hours" workflow — see Section 6, page 10.</dd>
+            </dl>
+          </div>
+          <div class="role-card">
+            <h4>Citizen</h4>
+            <div class="tag">A resident checking their own safety</div>
+            <dl>
+              <dt>Represents</dt><dd>A member of the public wanting to know if they're at risk and how to reach safety.</dd>
+              <dt>Sees</dt><dd>A "Your Safety Overview" dashboard about their own area, the nearest hazard, and the nearest safe site.</dd>
+              <dt>Can access</dt><dd>Overview, Safe Sites, Route Intelligence, Alerts, Settings — 5 pages, the smallest set of any role.</dd>
+              <dt>Cannot access</dt><dd>Hazard Intelligence, Habitations, Relocation, Institution / Evacuation, What-If, Audit Trail, National Relocations.</dd>
+              <dt>Also hidden from Citizens</dt><dd>Even on pages Citizens can open (like Safe Sites), several detail sections — infrastructure figures, bottleneck detail, capacity-breakdown modal — are deliberately hidden to keep the citizen view simple.</dd>
+            </dl>
+          </div>
+          <div class="role-card">
+            <h4>Emergency Coordinator</h4>
+            <div class="tag">Runs the operational response</div>
+            <dl>
+              <dt>Represents</dt><dd>The person coordinating evacuation and movement during an active emergency.</dd>
+              <dt>Sees</dt><dd>An "Emergency Coordination Overview" dashboard with an Active Incidents feed and quick links to Routes and Evacuation.</dd>
+              <dt>Can access</dt><dd>Every page Disaster Authority can, <em>except</em> Audit Trail and All Relocations Across India — 10 pages.</dd>
+              <dt>Can do</dt><dd>View (but cannot edit) the relocation allocation numbers Disaster Authority sets; everything else operational is fully open.</dd>
+              <dt>Cannot access</dt><dd>Audit Trail, All Relocations Across India.</dd>
+            </dl>
+          </div>
+        </div>
+
+        <h3>Access at a glance</h3>
+        <div class="twrap">
+          <table>
+            <thead><tr><th>Page</th><th>Disaster Authority</th><th>Volunteers</th><th>Citizen</th><th>Emergency Coordinator</th></tr></thead>
+            <tbody>
+              <tr><td>Overview</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+              <tr><td>Hazard Intelligence</td><td>✅</td><td>✅</td><td>—</td><td>✅</td></tr>
+              <tr><td>Habitations (list &amp; detail)</td><td>✅</td><td>—</td><td>—</td><td>✅</td></tr>
+              <tr><td>Relocation</td><td>✅</td><td>—</td><td>—</td><td>✅</td></tr>
+              <tr><td>Safe Sites</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+              <tr><td>Route Intelligence</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+              <tr><td>Institution / Evacuation</td><td>✅</td><td>✅</td><td>—</td><td>✅</td></tr>
+              <tr><td>What-If Simulator</td><td>✅</td><td>—</td><td>—</td><td>✅</td></tr>
+              <tr><td>Alerts</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+              <tr><td>Audit Trail</td><td>✅</td><td>—</td><td>—</td><td>—</td></tr>
+              <tr><td>Settings</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+              <tr><td>All Relocations Across India</td><td>✅</td><td>—</td><td>—</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout flag"><strong>An honest edge case worth knowing about:</strong> a Citizen's Overview map still shows a marker for their own area, and a Volunteer can still see habitation names inside the Hazard Intelligence risk boxes. Clicking either one tries to open the Habitation Detail page — which those two roles are not permitted to open. The result is not a crash: the application correctly shows a clean "Access restricted" screen. It is, however, a small inconsistency in the current prototype: those roles can <em>see</em> a habitation reference they can't actually open. This was confirmed by testing the actual behaviour, not assumed.</div>
+      </section>
+
+      <!-- ============ 5 ============ -->
+      <section class="block" id="s5">
+        <div class="block-head"><span class="idx">05</span><h2>Complete page list with routes</h2></div>
+        <p class="lede">Found by reading the routing file directly, not the sidebar. The sidebar only ever shows a role-filtered subset of this list.</p>
+        <div class="twrap">
+          <table>
+            <thead><tr><th>#</th><th>Page</th><th>Route</th><th>Type</th><th>Roles</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Landing</td><td class="path">/</td><td>Public page</td><td>Anyone (not logged in)</td></tr>
+              <tr><td>2</td><td>Role Select</td><td class="path">/role-select</td><td>Public page</td><td>Anyone (not logged in)</td></tr>
+              <tr><td>3</td><td>Overview</td><td class="path">/app</td><td>Page</td><td>All 4</td></tr>
+              <tr><td>4</td><td>Hazard Intelligence</td><td class="path">/app/hazard-intelligence</td><td>Page</td><td>Authority, Volunteers, Coordinator</td></tr>
+              <tr><td>5</td><td>Habitations</td><td class="path">/app/habitations</td><td>Page</td><td>Authority, Coordinator</td></tr>
+              <tr><td>6</td><td>Habitation Detail</td><td class="path">/app/habitations/:id</td><td>Dynamic page</td><td>Authority, Coordinator</td></tr>
+              <tr><td>7</td><td>Relocation</td><td class="path">/app/relocation</td><td>Page</td><td>Authority, Coordinator</td></tr>
+              <tr><td>8</td><td>Safe Sites</td><td class="path">/app/safe-sites</td><td>Page</td><td>All 4</td></tr>
+              <tr><td>9</td><td>Route Intelligence</td><td class="path">/app/routes</td><td>Page</td><td>All 4</td></tr>
+              <tr><td>10</td><td>Institution / Evacuation</td><td class="path">/app/institution</td><td>Page</td><td>Authority, Volunteers, Coordinator</td></tr>
+              <tr><td>11</td><td>What-If Simulator</td><td class="path">/app/what-if</td><td>Page</td><td>Authority, Coordinator</td></tr>
+              <tr><td>12</td><td>Alerts</td><td class="path">/app/alerts</td><td>Page</td><td>All 4</td></tr>
+              <tr><td>13</td><td>Audit Trail</td><td class="path">/app/audit-trail</td><td>Page</td><td>Authority only</td></tr>
+              <tr><td>14</td><td>Settings (incl. Profile)</td><td class="path">/app/settings</td><td>Page</td><td>All 4 (some sections Authority-only)</td></tr>
+              <tr><td>15</td><td>All Relocations Across India</td><td class="path">/app/national-relocations</td><td>Page</td><td>Authority only</td></tr>
+              <tr><td>—</td><td>Access Restricted</td><td>(same URL as the page attempted)</td><td>In-place fallback state, not its own route</td><td>Shown to any role visiting a page it can't open</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>That is <strong>15 real navigable routes</strong> (13 shown in some sidebar, 2 authority-only extras also reachable from within pages), <strong>1 dynamic detail route</strong> that generates a page per habitation, and <strong>1 fallback screen</strong> that is not a route of its own — visiting a forbidden page keeps the same web address but swaps in the restriction message. There is no separate error page (like a "404" page) for a genuinely unknown web address; any unmatched address falls back to the Landing page.</p>
+      </section>
+
+      <!-- ============ 6 ============ -->
+      <section class="block" id="s6">
+        <div class="block-head"><span class="idx">06</span><h2>Every page, in depth</h2></div>
+        <p class="lede">Click any page below to expand it. Each one covers purpose, who can open it, what's on screen, what you can do, what happens next, what it means in disaster-management terms, and — most importantly — how finished it actually is.</p>
+
+        <details class="page-card" id="p-overview">
+          <summary><div class="ptitle"><h3>1 · Overview</h3><span class="chip mock">Mock data</span><span class="chip good">Fully working prototype</span></div><span class="caret">▶</span></summary>
+          <div class="body">
+            <p><strong>Purpose.</strong> This is the home screen after logging in — a single-glance situation report. It is deliberately different for each role, because "the overview a citizen needs" and "the overview an authority needs" are genuinely different questions.</p>
+            <div class="kv"><dt>Route</dt><dd class="path">/app</dd><dt>Access</dt><dd>All four roles</dd></div>
+            <h4>What the user sees</h4>
+            <p><strong>Disaster Authority &amp; Emergency Coordinator</strong> get the full "operational view": eight statistic tiles — <strong>Low Risk Habitations</strong>, High-Risk Habitations, Critical Red Zone Habitations, People Requiring Immediate Relocation, Vulnerable Population Tracked, Available Safe-Site Capacity, Capacity Shortage, and <strong>Moderate Risk Habitations</strong> — followed by a four-tile Hazard Overview (one per hazard type), the main map, a Priority Habitations / Active Incidents list, and (for Authority only) a Recent Decisions feed pulled from the Audit Trail.</p>
+            <p><strong>Volunteers</strong> see four tiles about the specific institution they are currently supporting, plus a card naming that institution with quick links to its evacuation plan and a safe route.</p>
+            <p><strong>Citizens</strong> see four tiles about their own home area — its status, the nearest hazard, the nearest safe site, and a shortcut to the safest route — plus an Emergency Instructions card and a reminder that this is a demonstration.</p>
+            <h4>What the user can do</h4>
+            <ul>
+              <li>Click any statistic tile to jump to the page it summarises (e.g. the risk tiles jump to Habitations; capacity tiles jump to Safe Sites).</li>
+              <li>Toggle map layers on and off: Hazard Layers, Population, Infrastructure, Safe Sites.</li>
+              <li>Click any marker on the map (see Section 8 for exactly what each click does).</li>
+              <li>Click a Priority Habitation / Active Incident row to open that habitation.</li>
+            </ul>
+            <h4>Real-world meaning</h4>
+            <p>This is the equivalent of the first screen a duty officer checks at the start of a shift: how many places are safe, how many are worsening, and is there anything that needs attention right now.</p>
+            <div class="callout note">Every number on this page is <strong>calculated live from the same eight mock habitations and six mock safe sites</strong> used everywhere else in the app — it is not a separately hand-typed number, so it always agrees with what the Habitations and Safe Sites pages show.</div>
+          </div>
+        </details>
+
+        <details class="page-card" id="p-hazard">
+          <summary><div class="ptitle"><h3>2 · Hazard Intelligence</h3><span class="chip mock">Mock hazard data</span><span class="chip good">Fully working prototype</span></div><span class="caret">▶</span></summary>
+          <div class="body">
+            <p><strong>Purpose.</strong> A closer look at the four monitored hazards themselves — landslide, flood, coastal erosion, cloudburst — independent of any one habitation.</p>
+            <div class="kv"><dt>Route</dt><dd class="path">/app/hazard-intelligence</dd><dt>Access</dt><dd>Disaster Authority, Volunteers, Emergency Coordinator (not Citizen)</dd></div>
+            <h4>What the user sees</h4>
+            <ul>
+              <li>Four toggle chips, one per hazard type, that show or hide that hazard's shaded zones on the map.</li>
+              <li>A map with colour-shaded hazard zones (Safe / Moderate Risk / High Risk / Red Zone-Critical) and every habitation shown as a marker.</li>
+              <li>An "Active Layers" card: a qualitative HIGH/MEDIUM tag for each of the four hazards, plus one combined-risk number.</li>
+              <li>Two clickable colour-coded boxes: <strong>High Risk</strong> (red) and <strong>Moderate Risk</strong> (orange), each listing every habitation currently in that tier with its district and risk score.</li>
+            </ul>
+            <h4>What the user can do</h4>
+            <ul>
+              <li>Click a shaded hazard zone on the map to open a detail panel: hazard type, affected area, hazard-specific technical fields (e.g. slope and soil stability for a landslide zone; water level and flood depth for a flood zone), a confidence bar, and a "last updated" note.</li>
+              <li>Click any habitation marker on the map to open that habitation's own detail page.</li>
+              <li>Click any habitation name inside the High Risk or Moderate Risk box to open that exact habitation's detail page — the same destination as clicking its map marker.</li>
+            </ul>
+            <div class="callout note"><strong>Verified directly:</strong> clicking "Perungalathur" inside the High Risk box opens <span class="path">/app/habitations/perungalathur</span>; clicking "North Ridge Basti" inside the Moderate Risk box opens <span class="path">/app/habitations/north-ridge-basti</span>. Two different items, two different destinations — not one shared page.</div>
+            <div class="callout flag"><strong>What used to be here and no longer is:</strong> this page previously showed a page-level "Risk Score / Confidence / Today HH:MM / data quality / missing healthcare data" summary block, plus a standing "Frontend data status: mock data..." disclaimer, plus a plain ranked list called "Most Exposed Habitations." All three have been removed. Risk Score is now configured in Settings and shown per-habitation on the Habitation Detail page; the ranked list has been replaced by the two clickable risk boxes above; the disclaimer panel has been intentionally left off this specific page (it still appears on most other pages).</div>
+            <p><strong>Are the risk values real?</strong> No. Every hazard zone's numbers are hand-authored mock figures, and every habitation's risk score is calculated by a documented formula from mock inputs (see Section 9). The zone detail panel itself states "Mock prediction — backend not connected."</p>
+          </div>
+        </details>
+
+        <details class="page-card" id="p-habitations">
+          <summary><div class="ptitle"><h3>3 · Habitations</h3><span class="chip mock">Mock data</span><span class="chip good">Fully working prototype</span></div><span class="caret">▶</span></summary>
+          <div class="body">
+            <p><strong>Purpose.</strong> The complete registry of every populated place the system is tracking, in one sortable list — the working list a planner would scroll through to prioritise their day.</p>
+            <div class="kv"><dt>Route</dt><dd class="path">/app/habitations</dd><dt>Access</dt><dd>Disaster Authority, Emergency Coordinator only</dd></div>
+            <h4>What the user sees</h4>
+            <p>All 8 habitations, as a table on desktop or cards on mobile, sortable by Risk, Population, or Name. Each row shows: name (with a "RED ZONE" flag where relevant), district, population, dominant hazard, numeric risk score, vulnerability tier, count of historical incidents, current status badge, and relocation timeframe.</p>
+            <h4>What the user can do</h4>
+            <p>Click any row or card to open that habitation's detail page — <span class="path">/app/habitations/&lt;its-slug&gt;</span>.</p>
+            <h4>Habitation Detail (opened from here, the map, or search)</h4>
+            <div class="kv"><dt>Route pattern</dt><dd class="path">/app/habitations/kovalam-east</dd></div>
+            <p>Shows: a single-habitation map; a "What changed?" card that appears only when the current What-If scenario has actually shifted this habitation's risk tier; a "Why is this a Red Zone?" explanation listing the specific contributing factors in plain language, plus the four weighted scores behind the overall number (Hazard Intensity, Population Vulnerability, Disaster History, Infrastructure Constraint); the hazards present; the recommended next action and relocation timeframe; and a sidebar with the risk/confidence bars, a full population profile (elderly, children, disabled residents, healthcare dependency, road accessibility, shelter availability, historical incident count), and a note about what data is missing for this specific place. A "Find Relocation Sites" button jumps to the Relocation page pre-loaded for this habitation.</p>
+            <div class="callout note">Every one of the 8 habitation identifiers is already written as a clean, readable web address — <span class="path">kovalam-east</span>, <span class="path">hillview-colony</span>, <span class="path">perungalathur</span>, <span class="path">sunder-nagar</span>, <span class="path">ambedkar-nagar</span>, <span class="path">north-ridge-basti</span>, <span class="path">lakshmipuram</span>, <span class="path">greenfield-basti</span> — so every list row, map marker and search result for a given habitation always lands on that same one page. Refreshing the browser on any of these addresses reloads the correct habitation, not a blank page.</div>
+          </div>
+        </details>
+
+        <details class="page-card" id="p-relocation">
+          <summary><div class="ptitle"><h3>4 · Relocation</h3><span class="chip mock">Mock data</span><span class="chip good">Fully working prototype</span></div><span class="caret">▶</span></summary>
+          <div class="body">
+            <p><strong>Purpose.</strong> Turns "this habitation needs to move" into an actual plan: which safe site(s), how many people to each, and whether the plan is complete.</p>
+            <div class="kv"><dt>Route</dt><dd class="path">/app/relocation</dd><dt>Access</dt><dd>Disaster Authority, Emergency Coordinator only</dd></div>
+            <h4>What the user sees</h4>
+            <ul>
+              <li>A context bar naming the currently-selected habitation (switchable from a dropdown), its status, population and current relocation timeframe.</li>
+              <li>An allocation summary: population requiring relocation, how many are already allocated, how many are unallocated, and the current timeframe.</li>
+              <li>A <strong>destination search bar</strong> ("Search relocation destination...") that filters the list below live, by destination name, district, or site type, with a clear "no destinations match" empty state and a one-click reset.</li>
+              <li>Every safe site ranked as a match for this habitation, tagged <strong>Best Match</strong>, <strong>Alternate Option</strong>, or <strong>Partial Match</strong>, each with its safety score, available capacity, distance, and its current bottleneck.</li>
+            </ul>
+            <h4>What the user can do</h4>
+            <ul>
+              <li>Type into the search bar to instantly narrow the destination list.</li>
+              <li><strong>Disaster Authority only:</strong> type or drag a slider to allocate a specific number of people to a site, with an "allow override beyond capacity" checkbox for exceptional cases.</li>
+              <li>Emergency Coordinator sees the same allocation numbers as a read-only progress bar — informative, not editable.</li>
+              <li>Click "Why this site?" to see a side-by-side comparison against every other option, including a plain-language reason for each site that <em>wasn't</em> chosen.</li>
+              <li>Click "View Safe Routes" to jump straight to Route Intelligence with that site as the destination.</li>
+            </ul>
+            <div class="callout flag"><strong>Something that used to be on this page and is not anymore:</strong> a "Relocation Plan Summary — All Habitations" section, which totalled every habitation into Immediate / Short-Term / Medium-Term / Monitor-Only counts. That section has been removed from the current code. If this documentation is being compared against an older build or screenshot that still shows it, that build is out of date, not this one.</div>
+            <p><strong>Relocation timeframes used on this page:</strong> Immediate, Short-Term, Medium-Term, Monitor Only — see Section 10 for exactly what each means.</p>
+          </div>
+        </details>
+
+        <details class="page-card" id="p-safesites">
+          <summary><div class="ptitle"><h3>5 · Safe Sites</h3><span class="chip mock">Mock data</span><span class="chip good">Fully working prototype</span></div><span class="caret">▶</span></summary>
+          <div class="body">
+            <p><strong>Purpose.</strong> A profile page for every candidate relocation destination — camps, planned townships, and shelters — showing exactly how many people each can actually, safely support.</p>
+            <div class="kv"><dt>Route</dt><dd class="path">/app/safe-sites</dd><dt>Access</dt><dd>All four roles</dd></div>
+            <h4>What the user sees</h4>
+            <p>One card per site (6 total): safety score, effective capacity, current load percentage, available capacity, and a "suitability for [selected habitation]" score. For every role except Citizen, the card also shows water and medical capacity figures, road access, livelihood-continuity access, and a line stating the site's <strong>Bottleneck limitations</strong> — plain-language: the single weakest resource (physical space, water, medical support, sanitation, food, or accessibility) that actually caps how many people this site can safely take, regardless of how much open land it has.</p>
+            <h4>What the user can do</h4>
+            <ul>
+              <li>Click "Capacity Breakdown" (hidden from Citizens) to open a modal showing all six capacity dimensions as bars, with the bottleneck highlighted in red.</li>
+              <li>Click "Match Habitation" (Disaster Authority and Emergency Coordinator only) to jump to the Relocation planner.</li>
+              <li>Click "Route to This Site" to jump to Route Intelligence with this site pre-loaded as the destination.</li>
+            </ul>
+            <div class="callout note"><strong>Role-specific button visibility, verified:</strong> "Route to This Site" is hidden only for Disaster Authority (their job is planning allocation, not personally navigating); it is shown for Volunteers, Citizens, and Emergency Coordinator. Confirmed by testing both roles directly, not assumed from the code alone.</div>
+          </div>
+        </details>
+
+        <details class="page-card" id="p-routes">
+          <summary><div class="ptitle"><h3>6 · Route Intelligence</h3><span class="chip mock">Simulated routing</span><span class="chip good">Fully working prototype</span></div><span class="caret">▶</span></summary>
+          <div class="body">
+            <p><strong>Purpose.</strong> Answers "how does this specific group of people get from here to safety, and what should they watch out for on the way" — tailored to who is travelling, not a one-size-fits-all direction.</p>
+            <div class="kv"><dt>Route</dt><dd class="path">/app/routes</dd><dt>Access</dt><dd>All four roles</dd></div>
+            <h4>What the user sees</h4>
+            <ul>
+              <li>A map with an origin marker, a destination marker, and up to three candidate routes drawn between them.</li>
+              <li>Editable "From" and "To" location search fields.</li>
+              <li>Five traveller-profile buttons — School Children, Elderly People, Young Adults, People with Mobility Needs, Vehicles — each changing which route is recommended and how long the trip is estimated to take.</li>
+              <li>Each route card: distance, estimated travel time for the selected profile, a computed route safety score, and a recommendation tag (Recommended / Acceptable / Not Recommended / Not Accessible).</li>
+            </ul>
+            <h4>What the user can do</h4>
+            <ul>
+              <li>Search and select a different origin or destination, or tap the swap button.</li>
+              <li>Switch traveller profile — the recommended route and timings recalculate immediately.</li>
+              <li>Click a route card to select it on the map, or "Why this route? / Why not this route?" to open a full explanation panel with a risk score, confidence, and a hazard-exposure breakdown.</li>
+              <li>Click a red marker on the route itself to see the specific hazardous road segment it crosses (e.g. water depth, accessibility, a recommended action like "Avoid during heavy rainfall").</li>
+              <li>Compare nearby shelters in a separate modal.</li>
+            </ul>
+            <div class="callout flag"><strong>What used to be shown and is not anymore:</strong> a small colour-key legend reading "Safest Route / Balanced Route / Fastest Route" used to sit over the bottom-left of the map. That legend has been removed. The three routes themselves — and their names — are still fully present and functional as selectable cards in the side panel; only the redundant floating map legend was taken away.</div>
+            <p>Origin and destination can arrive here pre-loaded from several places: a selected habitation, a selected safe site, a specific evacuation group on the Institution page, or — newly — a specific record from the All Relocations Across India page, described on page 15.</p>
+            <div class="callout note">The map itself says so directly: <em>"Illustrative route — not a real routing engine."</em> Routes are generated locally by bending a straight line between two real coordinates, then checking which mock hazard zones it happens to cross — not by any real street-network or live-traffic routing service.</div>
+          </div>
+        </details>
+
+        <details class="page-card" id="p-institution">
+          <summary><div class="ptitle"><h3>7 · Institution / Evacuation</h3><span class="chip mock">Mock data</span><span class="chip warn">Partially implemented for Volunteers</span></div><span class="caret">▶</span></summary>
+          <div class="body">
+            <p><strong>Purpose.</strong> Group evacuation for places with many people in one location at once — schools, colleges, hospitals, care homes, community centres — where the plan has to account for different sub-groups needing different kinds of help.</p>
+            <div class="kv"><dt>Route</dt><dd class="path">/app/institution</dd><dt>Access</dt><dd>Disaster Authority, Volunteers, Emergency Coordinator (not Citizen)</dd></div>
+            <h4>What the user sees</h4>
+            <p>A selector grid of five sample institutions (a government secondary school, a degree college, a district hospital, a care home, a community centre), each with its type, district, group size, staff count, evacuation priority, and current readiness percentage. Selecting one shows its evacuation groups (for example a school's Primary Students, Secondary Students, and Senior Students, each mapped to a different traveller profile) and a done/pending readiness checklist.</p>
+            <h4>What the user can do</h4>
+            <p>Switch between institutions; click "View Route" on any evacuation group to jump straight to Route Intelligence, pre-loaded with that group's origin, destination, and traveller profile.</p>
+            <div class="callout flag"><strong>Straight answer on the naming question:</strong> this page is named "Institution / Evacuation" in the code and on screen — it was never renamed to "Volunteers," because it is not the Volunteers feature; it is a facilities-evacuation feature. Volunteers <em>can open this page</em> and view every institution's status, but the code does not include a separate mechanism for a volunteer to register interest, claim a task, log hours, or be assigned to a specific site. What exists for Volunteers today is <strong>visibility and navigation</strong> into this page, plus supportive framing on their own Overview dashboard ("Supporting [institution]," quick links to the Evacuation Plan and a Safe Route) — not a dedicated task-management system. This should not be described as a full volunteer coordination feature; it is the visible groundwork for one.</div>
+          </div>
+        </details>
+
+        <details class="page-card" id="p-whatif">
+          <summary><div class="ptitle"><h3>8 · What-If Simulator</h3><span class="chip mock">Frontend calculation</span><span class="chip good">Fully working prototype</span></div><span class="caret">▶</span></summary>
+          <div class="body">
+            <p><strong>Purpose.</strong> Lets a planner ask "what happens to every one of our numbers if conditions get worse (or better)?" before it actually happens — a rehearsal, not a forecast.</p>
+            <div class="kv"><dt>Route</dt><dd class="path">/app/what-if</dd><dt>Access</dt><dd>Disaster Authority, Emergency Coordinator only</dd></div>
+            <h4>What the user can change</h4>
+            <p>Eight sliders: Rainfall Intensity, Flood Depth, Landslide Susceptibility, Coastal Erosion Rate, Cloudburst Intensity, Drainage Capacity, Road Accessibility, and Population Vulnerability — each labelled with exactly which hazard(s) it affects.</p>
+            <h4>What happens when values change</h4>
+            <p>Every habitation's risk score is recalculated live, using the exact same formula the rest of the app uses (see Section 9) — this scenario is shared app-wide the moment it changes, so Overview, Hazard Intelligence, Habitations and Route Intelligence all reflect it immediately, not just this page.</p>
+            <h4>What results are shown here</h4>
+            <ul>
+              <li>A before/after table of the same eight dashboard metrics used on Overview, with the exact change for each.</li>
+              <li>A list of exactly which habitations crossed a Red Zone tier boundary under this scenario, and their new relocation timeframe.</li>
+              <li>A before/after comparison of how the three illustrative routes would be ranked for the currently-selected traveller profile.</li>
+            </ul>
+            <p>A scenario can be saved to one temporary slot and reloaded, or reset back to baseline.</p>
+            <div class="callout note">Labelled directly on screen as <em>"Simulated scenario output — not a live forecast."</em> This is a genuine, working local recalculation — not a static demo — but it is not a weather forecast or a trained predictive model; it applies a fixed, documented formula to slider values you choose.</div>
+          </div>
+        </details>
+
+        <details class="page-card" id="p-alerts">
+          <summary><div class="ptitle"><h3>9 · Alerts</h3><span class="chip mock">Live-derived from mock data</span><span class="chip good">Fully working prototype</span></div><span class="caret">▶</span></summary>
+          <div class="body">
+            <p><strong>Purpose.</strong> A single feed of things that need attention right now, instead of requiring the user to notice a change by re-checking every page manually.</p>
+            <div class="kv"><dt>Route</dt><dd class="path">/app/alerts</dd><dt>Access</dt><dd>All four roles (contents differ by role)</dd></div>
+            <h4>What the user sees</h4>
+            <p>A list of alerts, each with a severity (critical / warning / info), the hazard involved, a message, and an "Open" action linking to the related habitation, site, or institution. Alerts are generated fresh every time the page is viewed from the current state of habitations, safe sites, and institutions — for example, a habitation whose tier has just changed under the active scenario, a site nearing capacity, or an institution marked urgent with low readiness.</p>
+            <h4>What the user can do</h4>
+            <p>Filter by severity and by hazard type; mark an alert read; click "Open" to jump to the relevant page.</p>
+            <div class="callout note"><strong>Role-based visibility, confirmed in the code:</strong> a Citizen sees only genuinely public-safety-relevant alerts (a habitation's status worsening); administrative alerts about data confidence or site/institution operations stay hidden from Citizens. Volunteers additionally see evacuation-readiness alerts. Authority and Emergency Coordinator see every alert type.</div>
+            <p>These are not live push notifications or SMS/email alerts — they only appear while this page (or the notification bell in the header) is open in the browser.</p>
+          </div>
+        </details>
+
+        <details class="page-card" id="p-audit">
+          <summary><div class="ptitle"><h3>10 · Audit Trail</h3><span class="chip mock">Mock + session-generated</span><span class="chip good">Fully working prototype</span></div><span class="caret">▶</span></summary>
+          <div class="body">
+            <p><strong>Purpose.</strong> A record of who decided what, and why — the accountability layer that lets a decision be reviewed after the fact.</p>
+            <div class="kv"><dt>Route</dt><dd class="path">/app/audit-trail</dd><dt>Access</dt><dd>Disaster Authority only</dd></div>
+            <h4>What the user sees</h4>
+            <p>A timeline of events — 7 pre-written historical entries, plus new entries that are automatically added the moment this browser session changes a What-If scenario, changes a relocation allocation number, or a habitation's status tier flips. Each entry shows a timestamp, an event type, a previous value and new value, a plain-language reason, a named "actor," and a severity colour.</p>
+            <div class="callout flag">This log lives only in the current browser tab's memory. The 7 seed entries always reappear on refresh, but any entries this session generated are lost when the page reloads. That limitation is stated directly in the project's own code comments, not hidden. The page itself states: <em>"Frontend prototype audit log — not a real government audit or compliance system."</em></div>
+          </div>
+        </details>
+
+        <details class="page-card" id="p-settings">
+          <summary><div class="ptitle"><h3>11 · Settings (incl. Profile)</h3><span class="chip mock">Local UI state</span><span class="chip warn">Risk thresholds are display-only</span></div><span class="caret">▶</span></summary>
+          <div class="body">
+            <p><strong>Purpose.</strong> Personal preferences, account information, and — for Disaster Authority — configuration of how the risk system itself is presented.</p>
+            <div class="kv"><dt>Route</dt><dd class="path">/app/settings</dd><dt>Access</dt><dd>All four roles; two sections are Authority-only</dd></div>
+            <h4>What every role sees</h4>
+            <ul>
+              <li><strong>Profile card:</strong> name, email, role badge — this is the application's profile feature; there is no separate profile page.</li>
+              <li><strong>Notification Preferences:</strong> three on/off switches (high-risk zone alerts, weekly summary digest, route recommendation changes).</li>
+              <li><strong>Appearance:</strong> a dark/light mode toggle.</li>
+              <li><strong>Access:</strong> a sign-out button and a plain statement that this is mock authentication.</li>
+            </ul>
+            <h4>Disaster-Authority-only section: Risk Score</h4>
+            <p>A visibility switch (show or hide numeric risk scores app-wide) and three editable tier-boundary numbers — <strong>Moderate-risk, High-risk, and Critical-risk thresholds</strong> (Low-risk is always the fixed floor below the Moderate boundary). Each is shown with the score range it currently produces. Entering values out of increasing order is rejected with an explanation rather than silently accepted, and a "Reset to defaults" link restores the standard boundaries (40 / 65 / 85). The formula behind the score is spelled out in one line at the bottom of the section.</p>
+            <div class="callout flag"><strong>Important accuracy note:</strong> these threshold numbers currently only change what this Settings page itself displays. They are not yet wired back into the shared risk calculation used by Overview, Hazard Intelligence, Habitations, or the Habitation Detail page — those all continue to use the standard 40/65/85 boundaries regardless of what is set here. This is explicitly frontend-prototype state, as the page itself says, and this documentation is flagging the gap rather than describing the setting as fully connected.</div>
+            <h4>Disaster-Authority-only section: Data Sources</h4>
+            <p>A static disclosure table naming the mock "risk model version," "population data" source, and "infrastructure registry" source — informational text, not a live configuration control.</p>
+          </div>
+        </details>
+
+        <details class="page-card" id="p-national">
+          <summary><div class="ptitle"><h3>12 · All Relocations Across India</h3><span class="chip mock">Mock national data</span><span class="chip good">Fully working prototype</span></div><span class="caret">▶</span></summary>
+          <div class="body">
+            <p><strong>Purpose.</strong> A national-level rollup for the one role responsible for seeing the bigger picture across states, not just the local district.</p>
+            <div class="kv"><dt>Route</dt><dd class="path">/app/national-relocations</dd><dt>Access</dt><dd>Disaster Authority only — confirmed the page exists and is exactly this restricted</dd></div>
+            <h4>What the user sees</h4>
+            <p>An explicit "Mock / prototype data — no live government or backend feed connected" banner; five summary tiles (Active Relocations, People Being Relocated, States Involved, Temporary Relocations, Permanent Relocations); a map of India with one marker per relocation record's origin, coloured by hazard type; a search bar plus five filters (State, Type, Status, Hazard, Priority); and a full table (or mobile card list) of 15 mock relocation records spanning 12 states — Kerala, Assam, Odisha, Uttarakhand, Tamil Nadu, Gujarat, Bihar, Himachal Pradesh, Maharashtra, West Bengal, Karnataka, and Sikkim.</p>
+            <h4>What the user can do</h4>
+            <ul>
+              <li>Search or filter the list by any combination of state, relocation type, status, hazard, or priority.</li>
+              <li>Click any table row, mobile card, map marker, or the explicit "View route" action to open Route Intelligence pre-loaded with <em>that exact record's</em> real source and destination.</li>
+            </ul>
+            <div class="callout note"><strong>Verified directly, across four different records:</strong> "Meppadi Basti" opened a route to "Kalpetta Relocation Township" in Kerala; "Puri Coastal Hamlets" opened a route to "Bhubaneswar Rehabilitation Colony" in Odisha; "Uttarkashi Ridge Hamlets" opened a route to "Dehradun Transit Camp" in Uttarakhand; "Majuli Char Settlements" opened a route to "Jorhat Mainland Township" in Assam. Four different records produced four different, correct routes — not one shared example.</div>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============ 7 ============ -->
+      <section class="block" id="s7">
+        <div class="block-head"><span class="idx">07</span><h2>The complete application working flow</h2></div>
+        <p class="lede">From opening the browser to a decision being logged. Every step below is something the current code actually does — none are hypothetical.</p>
+
+        <h3>Step 1 — Opening the application</h3>
+        <p>The first screen anyone sees, logged in or not, is the public <strong>Landing page</strong> — a pitch explaining what GEOSENTRA does, ending in an "Explore Platform" button. There is no username/password form anywhere; "logging in" means picking a role card on the next screen. This is stated on-screen, not hidden: both the Landing footer and the role-selection page describe the session as a mock, local-only session with no real accounts.</p>
+
+        <h3>Step 2 — Role selection and login</h3>
+        <p>Clicking through leads to <span class="path">/role-select</span>, showing four role cards (Disaster Authority, Volunteers, Citizen, Emergency Coordinator). Picking one instantly creates a browser-only session and opens that role's Overview dashboard — no server round-trip, no password. Refreshing the browser keeps the session (it is remembered locally); signing out clears it and returns to role selection.</p>
+
+        <div class="journey">
+          <div class="jstep"><h4>Disaster Authority</h4><p>Logs in → reviews the Command Center Overview → opens Hazard Intelligence or a specific Habitation → checks relocation destinations and their capacity limits → allocates people to a site in Relocation → checks the route → configures Risk Score thresholds or reviews the audit log as needed → monitors nationwide progress in All Relocations Across India.</p></div>
+          <div class="jstep"><h4>Volunteers</h4><p>Logs in → sees which institution they're currently supporting → checks that institution's evacuation readiness and hazard exposure on the Institution / Evacuation page → opens a safe route for a specific group → checks Alerts for anything new.</p></div>
+          <div class="jstep"><h4>Citizen</h4><p>Logs in → sees their own area's status and nearest hazard → finds the nearest safe site → opens Route Intelligence to see the safest way to get there for their situation → checks Alerts for public-safety notices.</p></div>
+          <div class="jstep"><h4>Emergency Coordinator</h4><p>Logs in → reviews Active Incidents → opens Hazard Intelligence and Habitations to see who's affected → coordinates a route and, if needed, an evacuation plan through Institution / Evacuation → tracks progress alongside Disaster Authority (without the audit and national views).</p></div>
+        </div>
+      </section>
+
+      <!-- ============ 8 ============ -->
+      <section class="block" id="s8">
+        <div class="block-head"><span class="idx">08</span><h2>Map interaction flow</h2></div>
+        <p class="lede">Six maps exist in the codebase in total. All six use the same free, open map tiles (OpenStreetMap) with no paid API key of any kind. None of them render true map "pop-up" cards with buttons inside them — every marker instead shows a small hover label, and a click either navigates straight to another page or opens a full page-level panel.</p>
+        <div class="map-grid">
+          <div class="map-card"><h4>Overview map</h4><p><em>Dashboard, <span class="path">/app</span></em></p><ul><li>Habitations, safe sites, hospitals/schools/shelters, hazard zone shading.</li><li>Safe sites now render as distinct <strong>green box markers</strong> (not the standard pin shape), specifically to be unmistakable from every other marker type.</li><li>Habitation markers are a fixed red pin — their colour does not currently change with risk tier, even though the tier is attached to the marker's data.</li><li>Click a habitation → its detail page. Click a safe-site box → the Safe Sites page. No routes are drawn on this map (removed).</li></ul></div>
+          <div class="map-card"><h4>Hazard Intelligence map</h4><p><em><span class="path">/app/hazard-intelligence</span></em></p><ul><li>Shaded hazard-zone polygons, coloured by severity; habitation markers.</li><li>Click a zone → a detail panel opens (not a navigation). Click a habitation → its detail page.</li></ul></div>
+          <div class="map-card"><h4>Habitation Detail map</h4><p><em><span class="path">/app/habitations/:id</span></em></p><ul><li>Shows only the one selected habitation, centred and zoomed to it, with hazard shading for context. No further click-through — it's a locator, not a navigator, on this page.</li></ul></div>
+          <div class="map-card"><h4>Route Intelligence map</h4><p><em><span class="path">/app/routes</span></em></p><ul><li>Origin and destination markers, up to three route lines, and small circular markers over hazardous road segments.</li><li>Click a route line to select it; click a hazard-segment marker to open a detail panel about that stretch of road.</li></ul></div>
+          <div class="map-card"><h4>National Relocations map</h4><p><em><span class="path">/app/national-relocations</span></em></p><ul><li>One marker per relocation record, positioned at its real source location across India, coloured by hazard type.</li><li>Click a marker → jumps straight to Route Intelligence with that record's source and destination loaded.</li></ul></div>
+          <div class="map-card"><h4>Landing page map</h4><p><em>Public marketing page, <span class="path">/</span></em></p><ul><li>A small non-interactive preview showing a sample of habitations, safe sites and one route, purely for visual effect before login. Zoom/pan and clicks are intentionally disabled here.</li></ul></div>
+        </div>
+        <div class="callout note">Confirmed by direct testing: clicking different habitation markers on both the Overview map and the Hazard Intelligence map opens different, correct pages — for example one marker opened <span class="path">/app/habitations/kovalam-east</span> and a different marker opened <span class="path">/app/habitations/sunder-nagar</span>. This is not one shared destination.</div>
+      </section>
+
+      <!-- ============ 9 ============ -->
+      <section class="block" id="s9">
+        <div class="block-head"><span class="idx">09</span><h2>Risk, safety, capacity, and relocation terminology</h2></div>
+        <p class="lede">These terms sound similar but mean genuinely different things in the code. Confusing them is the single easiest way to misrepresent what the application does.</p>
+
+        <h3>Risk tiers (a habitation's status)</h3>
+        <div class="twrap">
+          <table>
+            <thead><tr><th>Label</th><th>Colour</th><th>Score range (default)</th><th>What it means</th><th>Resulting timeframe</th></tr></thead>
+            <tbody>
+              <tr><td>Normal <span class="chip good">Low</span></td><td>Green</td><td>0–39</td><td>No urgent concern under current conditions</td><td>Monitor Only</td></tr>
+              <tr><td>Watch <span class="chip warn">Moderate</span></td><td>Amber</td><td>40–64</td><td>Worth watching closely; conditions could worsen</td><td>Medium-Term</td></tr>
+              <tr><td>High Risk</td><td>Orange/Red</td><td>65–84</td><td>Should begin preparing to relocate</td><td>Short-Term</td></tr>
+              <tr><td>Critical Red Zone</td><td>Dark Red</td><td>85–100</td><td>Unsuitable for continued habitation right now</td><td>Immediate</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The numeric <strong>Risk Score</strong> that decides which tier a habitation falls into is calculated, not looked up: <code>Hazard Intensity × 0.40 + Population Vulnerability × 0.25 + Disaster History × 0.20 + Infrastructure Constraint × 0.15</code>, then nudged slightly toward the middle when data confidence is low. <strong>Confidence</strong> is a separate number describing how reliable the underlying data is — a habitation can have a high risk score and low confidence at the same time, which the app flags separately rather than blending the two together.</p>
+
+        <h3>Safe-site terms</h3>
+        <dl class="glossary">
+          <dt>Safety Score</dt><dd>How structurally/geographically safe the site itself is — a property of the site alone, independent of who might move there.</dd>
+          <dt>Effective Capacity</dt><dd>The smallest of the site's six resource capacities (physical space, water, medical support, sanitation, food, accessibility) — the real ceiling, because a site with huge open land but tiny water supply can still only support as many people as its water can serve.</dd>
+          <dt>Bottleneck limitations</dt><dd><b>In plain terms:</b> whichever one of those six resources is the weakest — the specific thing actually limiting how many people this site can safely take in. It is not a general summary of the site; it names one specific constraint.</dd>
+          <dt>Current Load</dt><dd>What percentage of effective capacity is already occupied or reserved.</dd>
+          <dt>Available Capacity</dt><dd>Effective Capacity minus what's already occupied or reserved — the actual remaining room.</dd>
+          <dt>Suitability</dt><dd>A different number from Safety Score: it blends the site's safety with how well it fits <em>this specific habitation</em> right now — available room relative to that habitation's population, road access, and livelihood continuity. A safer site can score lower here than a slightly-less-safe one if it can't hold everyone.</dd>
+        </dl>
+      </section>
+
+      <!-- ============ 10 ============ -->
+      <section class="block" id="s10">
+        <div class="block-head"><span class="idx">10</span><h2>Relocation types and statuses</h2></div>
+        <p class="lede">There are two separate small vocabularies in the code — do not merge them.</p>
+        <h3>Per-habitation relocation timeframe (Relocation, Habitations, What-If pages)</h3>
+        <div class="twrap"><table><thead><tr><th>Timeframe</th><th>Means</th></tr></thead><tbody>
+          <tr><td>Immediate</td><td>Move this habitation now — it's in the Critical Red Zone tier.</td></tr>
+          <tr><td>Short-Term</td><td>Begin preparing to move soon — High Risk tier.</td></tr>
+          <tr><td>Medium-Term</td><td>Plan ahead but no urgent action — Watch tier.</td></tr>
+          <tr><td>Monitor Only</td><td>No relocation action needed at present — Normal tier. This label still exists in the current code.</td></tr>
+        </tbody></table></div>
+        <h3>National relocation-activity type (All Relocations Across India page only)</h3>
+        <div class="twrap"><table><thead><tr><th>Type</th><th>Means</th></tr></thead><tbody>
+          <tr><td>Immediate</td><td>Urgent, ongoing right now.</td></tr>
+          <tr><td>Short-Term</td><td>A temporary move, expected to resolve soon.</td></tr>
+          <tr><td>Medium-Term</td><td>A longer temporary arrangement.</td></tr>
+          <tr><td>Permanent</td><td>A resettlement that is not expected to be temporary — this label exists only on this national page, not on the per-habitation timeframe above.</td></tr>
+        </tbody></table></div>
+        <h3>National relocation status</h3>
+        <div class="twrap"><table><thead><tr><th>Status</th><th>Means</th></tr></thead><tbody>
+          <tr><td><span class="chip info">Planned</span></td><td>Identified and scheduled, not yet started.</td></tr>
+          <tr><td><span class="chip warn">In Progress</span></td><td>Actively underway.</td></tr>
+          <tr><td><span class="chip good">Completed</span></td><td>Finished.</td></tr>
+          <tr><td><span class="chip bad">Delayed</span></td><td>Behind schedule.</td></tr>
+        </tbody></table></div>
+        <p>No "Pending" or "Cancelled" status exists in the current dataset or code — only the four above.</p>
+      </section>
+
+      <!-- ============ 11 ============ -->
+      <section class="block" id="s11">
+        <div class="block-head"><span class="idx">11</span><h2>The real-world disaster-management workflow, as the app supports it today</h2></div>
+        <div class="flow-item"><span class="flow-num">1</span><div>A hazard is entered into the system as a shaded zone (currently: hand-authored mock data — <span class="chip mock">mock</span>).</div></div>
+        <div class="flow-item"><span class="flow-num">2</span><div>The affected habitation appears on the map, coloured by tier in the sidebar and legend (though, precisely, the map marker's own colour is currently fixed, not tier-based — see Section 8).</div></div>
+        <div class="flow-item"><span class="flow-num">3</span><div>A user selects that habitation, from the map, the list, or search — <span class="chip good">working navigation</span>.</div></div>
+        <div class="flow-item"><span class="flow-num">4</span><div>The Habitation Detail page opens with its full risk and population profile — <span class="chip good">working, calculated live</span>.</div></div>
+        <div class="flow-item"><span class="flow-num">5</span><div>Risk and hazard information is reviewed, including exactly why the score is what it is — <span class="chip good">working</span>.</div></div>
+        <div class="flow-item"><span class="flow-num">6</span><div>Disaster Authority checks whether relocation is required by opening Relocation for that habitation — <span class="chip good">working</span>.</div></div>
+        <div class="flow-item"><span class="flow-num">7</span><div>Suitable relocation destinations are reviewed, ranked and searchable — <span class="chip good">working</span>.</div></div>
+        <div class="flow-item"><span class="flow-num">8</span><div>Safe-site capacity and bottleneck limitations are checked before committing — <span class="chip good">working</span>.</div></div>
+        <div class="flow-item"><span class="flow-num">9</span><div>A relocation destination is selected and people are allocated to it — <span class="chip good">working (Authority edits, Coordinator views)</span>.</div></div>
+        <div class="flow-item"><span class="flow-num">10</span><div>Routes and road conditions to that destination are reviewed, tailored to who is travelling — <span class="chip good">working, simulated routing</span>.</div></div>
+        <div class="flow-item"><span class="flow-num">11</span><div>Emergency Coordinators support the movement using the same route and habitation data — <span class="chip good">working</span>.</div></div>
+        <div class="flow-item"><span class="flow-num">12</span><div>Volunteers view the relevant institution's evacuation status and open routes for specific groups — <span class="chip warn">viewing works; assigning/logging a volunteer's own contribution does not exist yet</span>.</div></div>
+        <div class="flow-item"><span class="flow-num">13</span><div>Citizens receive relevant hazard and safe-route information about their own area — <span class="chip good">working</span>.</div></div>
+        <div class="flow-item"><span class="flow-num">14</span><div>Relocation status is monitored through the Overview dashboard and site cards — <span class="chip good">working</span>.</div></div>
+        <div class="flow-item"><span class="flow-num">15</span><div>Activities are recorded in the Audit Trail for accountability — <span class="chip warn">working, but only for the current browser session; not persisted after refresh</span>.</div></div>
+        <div class="flow-item"><span class="flow-num">16</span><div>Authorities review national relocation progress across states — <span class="chip good">working, mock national dataset</span>.</div></div>
+      </section>
+
+      <!-- ============ 12 ============ -->
+      <section class="block" id="s12">
+        <div class="block-head"><span class="idx">12</span><h2>Current implementation reality</h2></div>
+
+        <h3>A. Frontend features that genuinely work, locally, right now</h3>
+        <p>Navigation and page routing (including a working dynamic per-habitation address); search across habitations, sites, institutions, hazards and audit entries from the header; the Relocation destination search; the five National Relocations filters; every modal (hazard-zone detail, capacity breakdown, "why this route," shelter comparison, "why this site"); role-based page visibility and the Access Restricted fallback; dark/light theme; and every risk, capacity, suitability and route-safety number, which are all genuinely calculated in the browser from the underlying mock inputs, not hard-typed per screen.</p>
+
+        <h3>B. Features running on mock data</h3>
+        <p>All 8 habitations, all 6 safe sites, all 6 hazard zones, all 5 institutions, all 15 national relocation records, the 3 illustrative routes, and every seed audit-trail and alert entry.</p>
+
+        <h3>C. Simulated calculations happening inside the frontend</h3>
+        <p>Habitation risk score and status tier; safe-site effective/available capacity and bottleneck; per-habitation site suitability; route safety score and traveller-profile ranking; the entire What-If scenario recalculation; and every Overview/national summary tile (all derived live from the datasets above, never separately typed in).</p>
+
+        <h3>D. Features not connected — checked, not assumed</h3>
+        <div class="checklist">
+          <div class="check-item">Backend / server <span class="chip miss">Not connected</span></div>
+          <div class="check-item">Database <span class="chip miss">Not connected</span></div>
+          <div class="check-item">Live sensors / IoT <span class="chip miss">Not connected</span></div>
+          <div class="check-item">GPS / device location <span class="chip miss">Not connected</span></div>
+          <div class="check-item">Live map data feed <span class="chip miss">Not connected (tiles only, from OpenStreetMap)</span></div>
+          <div class="check-item">Trained ML model <span class="chip miss">Not connected</span></div>
+          <div class="check-item">Real-time hazard feed <span class="chip miss">Not connected</span></div>
+          <div class="check-item">Government data source <span class="chip miss">Not connected</span></div>
+          <div class="check-item">Real relocation records <span class="chip miss">Not connected — all invented</span></div>
+          <div class="check-item">Real push/SMS/email notifications <span class="chip miss">Not connected</span></div>
+          <div class="check-item">Real authentication / accounts <span class="chip miss">Not connected — local session only</span></div>
+        </div>
+        <p>Placeholder integration points exist in the code for several of these (named functions that currently return mock data and are commented as "future backend integration"), which is a sign the architecture was planned with a real backend in mind — but none of them currently call anything external.</p>
+
+        <h3>E. Placeholders and known gaps</h3>
+        <ul>
+          <li>Settings' Risk Score thresholds display-only, not yet wired into the shared risk calculation (Section 6, page 11).</li>
+          <li>No dedicated volunteer task/assignment workflow (Section 6, page 7).</li>
+          <li>Audit Trail entries generated during a session are lost on refresh.</li>
+          <li>Habitation map markers don't visually vary by risk tier (Section 8).</li>
+          <li>Citizens/Volunteers can see a habitation reference they can't open, landing on Access Restricted (Section 4).</li>
+          <li>No genuine 404/error page for a mistyped address — it falls back to the Landing page.</li>
+        </ul>
+      </section>
+
+      <!-- ============ 13 ============ -->
+      <section class="block" id="s13">
+        <div class="block-head"><span class="idx">13</span><h2>Implemented vs. simulated vs. missing, at a glance</h2></div>
+        <div class="twrap">
+          <table><thead><tr><th>Capability</th><th>Status</th></tr></thead><tbody>
+            <tr><td>Role-based login and navigation</td><td><span class="chip good">Implemented (simulated auth)</span></td></tr>
+            <tr><td>Habitation risk scoring</td><td><span class="chip warn">Simulated calculation, live in-browser</span></td></tr>
+            <tr><td>Safe-site capacity &amp; bottleneck logic</td><td><span class="chip warn">Simulated calculation, live in-browser</span></td></tr>
+            <tr><td>Relocation allocation planning</td><td><span class="chip good">Implemented, in-memory only</span></td></tr>
+            <tr><td>Route generation &amp; scoring</td><td><span class="chip warn">Simulated, not a real routing engine</span></td></tr>
+            <tr><td>What-If scenario engine</td><td><span class="chip warn">Simulated calculation</span></td></tr>
+            <tr><td>Alerts</td><td><span class="chip warn">Derived live from mock state, not pushed</span></td></tr>
+            <tr><td>Audit trail</td><td><span class="chip warn">Session-only, resets on refresh</span></td></tr>
+            <tr><td>Risk Score settings</td><td><span class="chip bad">Display-only, not yet connected to scoring</span></td></tr>
+            <tr><td>National relocation monitoring</td><td><span class="chip good">Implemented, mock dataset</span></td></tr>
+            <tr><td>Volunteer task assignment</td><td><span class="chip miss">Missing</span></td></tr>
+            <tr><td>Live backend / database / ML / sensors</td><td><span class="chip miss">Missing</span></td></tr>
+          </tbody></table>
+        </div>
+      </section>
+
+      <!-- ============ 14 ============ -->
+      <section class="block" id="s14">
+        <div class="block-head"><span class="idx">14</span><h2>Page-by-page summary table</h2></div>
+        <div class="twrap">
+          <table>
+            <thead><tr><th>Page</th><th>Route</th><th>Purpose</th><th>Roles</th><th>Main features</th><th>Main action</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Landing</td><td class="path">/</td><td>Public pitch</td><td>Anyone</td><td>Hero, pipeline, preview map</td><td>Explore Platform</td><td><span class="chip good">Working</span></td></tr>
+              <tr><td>Role Select</td><td class="path">/role-select</td><td>Choose a role</td><td>Anyone</td><td>4 role cards</td><td>Pick a role to "log in"</td><td><span class="chip mock">Mock auth</span></td></tr>
+              <tr><td>Overview</td><td class="path">/app</td><td>Role-specific home dashboard</td><td>All 4</td><td>Stat tiles, map, priority list</td><td>Drill into a statistic or marker</td><td><span class="chip good">Working</span></td></tr>
+              <tr><td>Hazard Intelligence</td><td class="path">/app/hazard-intelligence</td><td>Hazard zone detail</td><td>Authority, Volunteers, Coordinator</td><td>Hazard map, risk boxes</td><td>Open a hazard zone or habitation</td><td><span class="chip good">Working</span></td></tr>
+              <tr><td>Habitations</td><td class="path">/app/habitations</td><td>Full habitation registry</td><td>Authority, Coordinator</td><td>Sortable table/cards</td><td>Open a habitation</td><td><span class="chip good">Working</span></td></tr>
+              <tr><td>Habitation Detail</td><td class="path">/app/habitations/:id</td><td>One habitation's full profile</td><td>Authority, Coordinator</td><td>Risk breakdown, population profile</td><td>Find relocation sites</td><td><span class="chip good">Working</span></td></tr>
+              <tr><td>Relocation</td><td class="path">/app/relocation</td><td>Plan a move</td><td>Authority, Coordinator</td><td>Search, ranked sites, allocation</td><td>Allocate people to a site</td><td><span class="chip good">Working</span></td></tr>
+              <tr><td>Safe Sites</td><td class="path">/app/safe-sites</td><td>Destination profiles</td><td>All 4</td><td>Capacity, bottleneck, breakdown</td><td>Open route / match habitation</td><td><span class="chip good">Working</span></td></tr>
+              <tr><td>Route Intelligence</td><td class="path">/app/routes</td><td>Movement planning</td><td>All 4</td><td>3 routes, 5 profiles, hazards</td><td>Select a route / profile</td><td><span class="chip warn">Simulated routing</span></td></tr>
+              <tr><td>Institution / Evacuation</td><td class="path">/app/institution</td><td>Group evacuation</td><td>Authority, Volunteers, Coordinator</td><td>5 institutions, groups, checklist</td><td>View route for a group</td><td><span class="chip warn">Viewing only for Volunteers</span></td></tr>
+              <tr><td>What-If Simulator</td><td class="path">/app/what-if</td><td>Scenario testing</td><td>Authority, Coordinator</td><td>8 sliders, before/after</td><td>Adjust a slider</td><td><span class="chip warn">Simulated</span></td></tr>
+              <tr><td>Alerts</td><td class="path">/app/alerts</td><td>Attention feed</td><td>All 4</td><td>Filters, mark read</td><td>Open related item</td><td><span class="chip warn">Derived, not pushed</span></td></tr>
+              <tr><td>Audit Trail</td><td class="path">/app/audit-trail</td><td>Decision record</td><td>Authority only</td><td>Timeline of events</td><td>Read-only review</td><td><span class="chip warn">Session-only</span></td></tr>
+              <tr><td>Settings</td><td class="path">/app/settings</td><td>Preferences &amp; profile</td><td>All 4</td><td>Profile, theme, risk thresholds</td><td>Adjust a threshold or sign out</td><td><span class="chip bad">Thresholds display-only</span></td></tr>
+              <tr><td>All Relocations Across India</td><td class="path">/app/national-relocations</td><td>National monitoring</td><td>Authority only</td><td>Map, filters, 15 records</td><td>Open a record's route</td><td><span class="chip good">Working</span></td></tr>
+              <tr><td>Access Restricted</td><td>(same as attempted route)</td><td>Permission fallback</td><td>Shown to unauthorised roles</td><td>Explanation + 2 buttons</td><td>Return to dashboard / switch role</td><td><span class="chip good">Working</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 15 ============ -->
+      <section class="block" id="s15">
+        <div class="block-head"><span class="idx">15</span><h2>Complete feature checklist</h2></div>
+        <div class="checklist">
+          <div class="check-item">Login (simulated) <span class="chip good">Implemented</span></div>
+          <div class="check-item">Role selection <span class="chip good">Implemented</span></div>
+          <div class="check-item">Role-based dashboard <span class="chip good">Implemented</span></div>
+          <div class="check-item">Overview page <span class="chip good">Implemented</span></div>
+          <div class="check-item">Low-risk habitation count <span class="chip good">Implemented</span></div>
+          <div class="check-item">Moderate-risk habitation count <span class="chip good">Implemented</span></div>
+          <div class="check-item">Hazard Intelligence <span class="chip good">Implemented</span></div>
+          <div class="check-item">Hazard map <span class="chip good">Implemented</span></div>
+          <div class="check-item">Habitation markers <span class="chip good">Implemented</span></div>
+          <div class="check-item">Habitation details <span class="chip good">Implemented</span></div>
+          <div class="check-item">Relocation page <span class="chip good">Implemented</span></div>
+          <div class="check-item">Relocation search <span class="chip good">Implemented</span></div>
+          <div class="check-item">Relocation types <span class="chip good">Implemented</span></div>
+          <div class="check-item">Relocation statuses (national page) <span class="chip good">Implemented</span></div>
+          <div class="check-item">Safe Sites <span class="chip good">Implemented</span></div>
+          <div class="check-item">Safe-site capacity <span class="chip good">Implemented</span></div>
+          <div class="check-item">Safe-site bottleneck limitations <span class="chip good">Implemented</span></div>
+          <div class="check-item">Route Intelligence <span class="chip warn">Implemented, simulated</span></div>
+          <div class="check-item">Volunteer page access <span class="chip good">Implemented</span></div>
+          <div class="check-item">Volunteer task assignment <span class="chip miss">Missing</span></div>
+          <div class="check-item">Citizen access <span class="chip good">Implemented</span></div>
+          <div class="check-item">Emergency Coordinator access <span class="chip good">Implemented</span></div>
+          <div class="check-item">What-If Simulator <span class="chip warn">Implemented, simulated</span></div>
+          <div class="check-item">Alerts <span class="chip warn">Implemented, derived not pushed</span></div>
+          <div class="check-item">Audit Trail <span class="chip warn">Implemented, session-only</span></div>
+          <div class="check-item">Settings <span class="chip good">Implemented</span></div>
+          <div class="check-item">Risk Score visibility toggle <span class="chip good">Implemented</span></div>
+          <div class="check-item">Risk Score thresholds <span class="chip bad">Implemented, not wired to scoring</span></div>
+          <div class="check-item">Profile <span class="chip good">Implemented (inside Settings)</span></div>
+          <div class="check-item">Logout <span class="chip good">Implemented</span></div>
+          <div class="check-item">National relocation page <span class="chip good">Implemented</span></div>
+          <div class="check-item">Map navigation to habitation pages <span class="chip good">Implemented</span></div>
+          <div class="check-item">Global search <span class="chip good">Implemented</span></div>
+          <div class="check-item">Filters (relocation, national page) <span class="chip good">Implemented</span></div>
+          <div class="check-item">Modals (zone, capacity, route, shelter) <span class="chip good">Implemented</span></div>
+          <div class="check-item">Real push notifications <span class="chip miss">Missing</span></div>
+          <div class="check-item">Responsive / mobile layout <span class="chip good">Implemented</span></div>
+          <div class="check-item">Real authentication <span class="chip miss">Missing</span></div>
+          <div class="check-item">Backend / database / ML / live feeds <span class="chip miss">Missing</span></div>
+        </div>
+      </section>
+
+      <!-- ============ 16 ============ -->
+      <section class="block" id="s16">
+        <div class="block-head"><span class="idx">16</span><h2>What is required next to make this a real working system</h2></div>
+        <ol>
+          <li><strong>A real hazard data feed</strong> — from meteorological, geological or satellite sources — to replace the hand-authored hazard zones.</li>
+          <li><strong>A trained risk model</strong> per hazard type, replacing the current fixed formula, with the model's own confidence output feeding the existing confidence display.</li>
+          <li><strong>A backend and database</strong> to store habitations, safe sites, institutions, allocations, and the audit trail permanently — the frontend's calculation logic (risk, capacity, suitability, routing) is already shaped to be handed real numbers instead of mock ones, since it was deliberately built to be swapped out one function at a time.</li>
+          <li><strong>Real authentication and accounts</strong>, replacing the mock role-selection login, with real permission enforcement on a server rather than only in the browser.</li>
+          <li><strong>A real routing engine</strong> (road-network aware, ideally with live traffic/road-closure data) to replace the illustrative straight-line-with-bend routes.</li>
+          <li><strong>Real notification delivery</strong> (SMS, push, email) for the Alerts feature, instead of only appearing while the app is open.</li>
+          <li><strong>Connecting the Risk Score settings</strong> in Settings to the actual scoring engine, so changing a threshold there changes what the rest of the app classifies as Low/Moderate/High/Critical.</li>
+          <li><strong>A volunteer task/assignment system</strong> — sign-up, task claiming, hours or contribution logging — to make the Volunteers role a complete workflow rather than a viewing role.</li>
+          <li><strong>Persistent audit logging</strong>, so decisions survive a page refresh and a server restart, not just the current browser tab.</li>
+        </ol>
+      </section>
+
+      <!-- ============ 17 ============ -->
+      <section class="block" id="s17">
+        <div class="block-head"><span class="idx">17</span><h2>Final conclusion</h2></div>
+        <p>GEOSENTRA today is a complete, working demonstration of <em>how</em> a disaster-relocation decision-support system should feel to use: four clearly separated roles, a full chain from hazard to habitation to relocation destination to safe route, transparent reasoning behind every number, and a national-level view for oversight. Every screen described in this document was opened and exercised directly to confirm it — the risk-box clicks, the four different national-relocation routes, the role-restricted pages, the search filters — none of it is assumed from reading code alone.</p>
+        <p>What it is not, and does not claim to be, is a live disaster-monitoring system. There is no government data feed, no trained model, no real accounts, and no persistent storage behind any of it. That distinction is not a weakness to hide — the project's own interface says so, page after page, in plain language. The honest way to present GEOSENTRA to a judge, an official, or a partner is exactly that: a fully-realised user experience and decision logic, built and ready to be connected to the real data sources listed in Section 16, rather than a finished production system.</p>
+      </section>
+
+      <footer class="endnote">
+        Prepared by inspecting the GEOSENTRA frontend codebase directly — routing files, role configuration, page components, and mock data files — and by exercising the running application across all four roles. Where a claim could not be confirmed from the code or by direct testing, it has been stated as such rather than assumed.
+      </footer>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  const tocEl = document.getElementById('toc');
+  const tocToggle = document.getElementById('tocToggle');
+  if (tocToggle) {
+    tocToggle.addEventListener('click', () => {
+      const isOpen = tocEl.classList.toggle('open');
+      tocToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+  }
+  // Auto-expand a page card if the visitor jumps straight to it via a hash link.
+  function openTargetDetails() {
+    const id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (el && el.tagName === 'DETAILS') {
+      el.open = true;
+    }
+  }
+  window.addEventListener('hashchange', openTargetDetails);
+  openTargetDetails();
+</script>
