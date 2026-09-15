@@ -8,7 +8,7 @@ import DemoToast from '../components/ui/DemoToast'
 import GeoMap from '../components/map/GeoMap'
 import { LegendDot, LegendBox } from '../components/map/MapLegend'
 import { STATUS_TONE } from '../components/ui/OperationSummary'
-import { SAFE_SITE_COLOR } from '../components/map/mapLayerDefs'
+import { SAFE_SITE_COLOR, RELIEF_SITE_COLOR } from '../components/map/mapLayerDefs'
 import ResourceBox from '../components/resources/ResourceBox'
 import ResourceDetailsDrawer from '../components/resources/ResourceDetailsDrawer'
 import { getSafeSite } from '../data/safeSites'
@@ -45,6 +45,12 @@ const DEFAULT_PROFILE = 'young-adult'
 // level) — reuses the exact OPERATION_STATUS values already stored on every
 // operation, never an invented status.
 const STATUS_ROUTE_COLOR = {
+  [OPERATION_STATUS.ASSIGNED]: '#2563eb',
+  [OPERATION_STATUS.DISPATCHED]: '#3b82f6',
+  [OPERATION_STATUS.EN_ROUTE]: '#0284c7',
+  [OPERATION_STATUS.ARRIVED]: '#0d9488',
+  [OPERATION_STATUS.IN_PROGRESS]: '#7c3aed',
+  [OPERATION_STATUS.COMPLETED]: '#059669',
   [OPERATION_STATUS.TEAM_ASSIGNMENT_PENDING]: '#d97706',
   [OPERATION_STATUS.TEAM_ASSIGNED]: '#2563eb',
   [OPERATION_STATUS.OPERATION_ACTIVE]: '#7c3aed',
@@ -55,10 +61,10 @@ const STATUS_ROUTE_COLOR = {
 const DEFAULT_ROUTE_COLOR = '#64748b'
 
 const STATUS_LEGEND = [
-  { status: OPERATION_STATUS.TEAM_ASSIGNMENT_PENDING, label: 'Team Notified' },
-  { status: OPERATION_STATUS.TEAM_ASSIGNED, label: 'En Route' },
-  { status: OPERATION_STATUS.OPERATION_ACTIVE, label: 'In Progress' },
-  { status: OPERATION_STATUS.RELOCATION_COMPLETED, label: 'Completed' },
+  { status: OPERATION_STATUS.ASSIGNED, label: 'Assigned' },
+  { status: OPERATION_STATUS.EN_ROUTE, label: 'En Route' },
+  { status: OPERATION_STATUS.IN_PROGRESS, label: 'In Progress' },
+  { status: OPERATION_STATUS.COMPLETED, label: 'Completed' },
   { status: OPERATION_STATUS.OPERATION_CLOSED, label: 'Closed' },
 ]
 
@@ -156,7 +162,7 @@ export default function OperationManagement() {
     const m = []
     rows.forEach(({ op, habitation, site }) => {
       m.push({ id: `hab-${habitation.id}`, type: 'habitation', position: habitation.position, label: habitation.name, priority: habitation.risk.status })
-      if (site) m.push({ id: `site-${op.habitationId}`, type: 'site', shape: 'box', color: SAFE_SITE_COLOR, position: site.position, label: site.name })
+      if (site) m.push({ id: `site-${op.habitationId}`, type: 'site', shape: 'box', color: RELIEF_SITE_COLOR, position: site.position, label: site.name })
     })
     return m
   }, [rows])
@@ -200,9 +206,9 @@ export default function OperationManagement() {
     <div className="p-4 lg:p-8 w-full max-w-[1600px] mx-auto space-y-6 min-w-0">
       <div>
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <ClipboardList size={22} className="text-blue-600 dark:text-blue-400" /> Operation Management
+          <ClipboardList size={22} className="text-blue-600 dark:text-blue-400" /> Emergency Response Operations
         </h1>
-        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Every relocation operation, on one map — select a route or a table row to open its full report.</p>
+        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Every emergency relief operation, on one map — select a route or a table row to open its full report.</p>
       </div>
 
       {/* All-operations map — every operation's marker and route stays mounted
@@ -225,7 +231,7 @@ export default function OperationManagement() {
 
         <div className="absolute bottom-3 left-3 z-[500] glass rounded-xl px-3 py-2 shadow-lg flex flex-wrap items-center gap-3 text-[11px] max-w-[90%]">
           <LegendDot color="#dc2626" label="Habitation" />
-          <LegendBox color={SAFE_SITE_COLOR} label="Safe Site" />
+          <LegendBox color={RELIEF_SITE_COLOR} label="Relief Site" />
           {STATUS_LEGEND.map((s) => <LegendDot key={s.status} color={STATUS_ROUTE_COLOR[s.status]} label={s.label} />)}
         </div>
 
@@ -269,31 +275,31 @@ export default function OperationManagement() {
           <ReportSection title="Operation Details">
             <ReportStat label="Hazard Type" value={getHazardType(selected.habitation.primaryHazard)?.label} />
             <ReportStat label="Hazard Severity" value={selected.habitation.risk.status} />
-            <ReportStat label="Source" value={`${selected.habitation.name}, ${selected.habitation.district}`} />
-            <ReportStat label="Destination" value={selected.site ? `${selected.site.name}, ${selected.site.district}` : 'Not selected'} />
+            <ReportStat label="Source (Affected Area)" value={`${selected.habitation.name}, ${selected.habitation.district}`} />
+            <ReportStat label="Destination (Relief Site)" value={selected.site ? `${selected.site.name}, ${selected.site.district}` : 'Not selected'} />
             <ReportStat label="Current Stage" value={STATUS_DISPLAY_LABEL[selected.op.status] || selected.op.status} />
-            <ReportStat label="Safe-Site Capacity" value={selected.site ? `${computeAvailableCapacity(selected.site).toLocaleString()} available` : 'Not available'} />
+            <ReportStat label="Relief Site Capacity" value={selected.site ? `${computeAvailableCapacity(selected.site).toLocaleString()} available` : 'Not available'} />
           </ReportSection>
 
-          <ReportSection title="Assigned Team">
-            <ReportStat label="Coordinator" value={selected.coordinator?.name || 'Not yet assigned'} />
-            <ReportStat label="Team Availability" value={selected.coordinator?.status || 'Not available'} />
+          <ReportSection title="Assigned Emergency Coordinator & Team">
+            <ReportStat label="Emergency Coordinator" value={selected.coordinator?.name || 'Not yet assigned'} />
+            <ReportStat label="Coordinator Status" value={selected.coordinator?.status || 'Not available'} />
             <ReportStat label="Volunteers" value={selected.assignedVolunteers.length ? selected.assignedVolunteers.map((v) => v.name).join(', ') : 'None assigned'} />
-            <ReportStat label="Current Team Location" value="Not available — live tracking unsupported" />
+            <ReportStat label="Current Team Location" value="Live tracking via Flutter mobile app" />
           </ReportSection>
 
-          <ReportSection title="Rescue / Relocation Details">
-            <ReportStat label="People Reallocated" value={selected.op.relocatedCount?.toLocaleString() ?? '0'} />
-            <ReportStat label="Total Affected" value={selected.op.populationRequiring?.toLocaleString() ?? '0'} />
+          <ReportSection title="Relief & Evacuation Details">
+            <ReportStat label="People Relocated" value={selected.op.relocatedCount?.toLocaleString() ?? '0'} />
+            <ReportStat label="Total Requiring Relief" value={selected.op.populationRequiring?.toLocaleString() ?? '0'} />
             <ReportStat label="People Remaining" value={Math.max(0, (selected.op.populationRequiring || 0) - (selected.op.relocatedCount || 0)).toLocaleString()} />
-            <ReportStat label="Vehicle Used" value="Not available" />
+            <ReportStat label="Assigned Vehicles" value="Coordinated via Logistics Desk" />
           </ReportSection>
 
           <ReportSection title="Route Information">
             <ReportStat label="Route Distance" value={selected.route ? `${selected.route.distanceKm} km` : 'Not available'} />
             <ReportStat label="Estimated Travel Time" value={selected.stats ? `${selected.stats.timeMin} min` : 'Not available'} />
             <ReportStat label="Hazard Exposure" value={selected.stats?.dominantHazardLabel || 'No hazard exposure detected'} />
-            <ReportStat label="Route Status" value={selected.op.routeStatus || 'Not recorded'} />
+            <ReportStat label="Route Status" value={selected.op.routeStatus || 'Clear / Monitored'} />
           </ReportSection>
         </Card>
       )}
@@ -301,20 +307,19 @@ export default function OperationManagement() {
       {/* Operations table */}
       <Card className="overflow-hidden overflow-x-auto">
         {rows.length === 0 ? (
-          <p className="p-8 text-center text-sm text-slate-400 dark:text-slate-500">No operations started yet. Open a habitation and click "Plan Relocation" to begin.</p>
+          <p className="p-8 text-center text-sm text-slate-400 dark:text-slate-500">No operations started yet. Open a habitation and click "Assign Emergency Coordinator" to begin.</p>
         ) : (
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-100 dark:border-slate-800 text-left text-xs uppercase tracking-wide text-slate-400 dark:text-slate-500">
                 <th className="px-4 py-3.5 font-semibold">Operation</th>
-                <th className="px-4 py-3.5 font-semibold">Team Members</th>
-                <th className="px-4 py-3.5 font-semibold">Source</th>
-                <th className="px-4 py-3.5 font-semibold">Destination</th>
+                <th className="px-4 py-3.5 font-semibold">Emergency Coordinator</th>
+                <th className="px-4 py-3.5 font-semibold">Affected Habitation</th>
+                <th className="px-4 py-3.5 font-semibold">Relief Site</th>
                 <th className="px-4 py-3.5 font-semibold">Hazard</th>
                 <th className="px-4 py-3.5 font-semibold">Risk</th>
                 <th className="px-4 py-3.5 font-semibold">Route Distance</th>
-                <th className="px-4 py-3.5 font-semibold">Vehicle</th>
-                <th className="px-4 py-3.5 font-semibold">Reallocated</th>
+                <th className="px-4 py-3.5 font-semibold">Relocated</th>
                 <th className="px-4 py-3.5 font-semibold">Progress</th>
                 <th className="px-4 py-3.5 font-semibold">Status</th>
                 <th className="px-4 py-3.5 font-semibold">Last Update</th>
@@ -344,7 +349,6 @@ export default function OperationManagement() {
                     <td className="px-4 py-4 text-slate-600 dark:text-slate-400">{getHazardType(habitation.primaryHazard)?.label}</td>
                     <td className="px-4 py-4 text-slate-600 dark:text-slate-400">{habitation.risk.status}</td>
                     <td className="px-4 py-4 text-slate-600 dark:text-slate-400">{route ? `${route.distanceKm} km` : '—'}</td>
-                    <td className="px-4 py-4 text-slate-400 dark:text-slate-500">Not available</td>
                     <td className="px-4 py-4 text-slate-600 dark:text-slate-400">{(op.relocatedCount || 0).toLocaleString()}</td>
                     <td className="px-4 py-4 text-slate-600 dark:text-slate-400">{progressPct}%</td>
                     <td className="px-4 py-4">

@@ -48,9 +48,9 @@ export default function SafeSites() {
   return (
     <div className="p-4 lg:p-8 max-w-[1600px] mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Safe Site Intelligence</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Relief Site Intelligence</h1>
         <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
-          Effective capacity is bound by the weakest supporting-infrastructure dimension — safety score, suitability and available capacity are three
+          Effective relief capacity is bound by the weakest supporting-infrastructure dimension — safety score, suitability and available capacity are three
           distinct numbers, not one.
         </p>
       </div>
@@ -107,14 +107,14 @@ export default function SafeSites() {
                   </Button>
                 )}
                 {canPlanRelocation && (
-                  <Button size="sm" className="flex-1" onClick={() => navigate('/app/relocation')}>
-                    Match Habitation
+                  <Button size="sm" className="flex-1" onClick={() => navigate(`/app/assign-coordinator/${habitation.id}`)}>
+                    Assign Coordinator
                   </Button>
                 )}
               </div>
               {(!isAuthority || inFlow) && (
                 <Button variant="ghost" size="sm" className="mt-2 w-full" onClick={() => selectForCase(site.id)}>
-                  <ShieldCheck size={14} /> {inFlow ? 'Select This Safe Site' : 'Route to This Site'}
+                  <ShieldCheck size={14} /> {inFlow ? 'Select This Relief Site' : 'Route to This Site'}
                 </Button>
               )}
             </Card>

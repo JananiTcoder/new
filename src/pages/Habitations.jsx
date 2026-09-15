@@ -145,19 +145,19 @@ export default function Habitations() {
           </div>
         </Card>
         <MetricCard
-          label="Awaiting Relocation"
+          label="Awaiting Emergency Coordinator"
           value={awaitingRelocationCount}
           icon="Clock"
           tone={awaitingRelocationCount > 0 ? 'warning' : 'good'}
-          trend="High risk or above, no operation started"
-          onClick={() => navigate('/app/relocation')}
+          trend="High risk or above, coordinator not yet assigned"
+          onClick={() => navigate('/app/assign-coordinator')}
         />
         <MetricCard
-          label="Active Relocations"
+          label="Active Relief Operations"
           value={activeRelocationsCount}
           icon="Activity"
           tone="good"
-          trend="Operations currently in progress"
+          trend="Emergency response operations currently active"
           onClick={() => navigate('/app/operations')}
         />
       </div>

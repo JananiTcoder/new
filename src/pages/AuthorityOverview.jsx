@@ -5,7 +5,7 @@ import GeoMap from '../components/map/GeoMap'
 import AlertTicker from '../components/layout/AlertTicker'
 import AnalyticsPanel from '../components/map/AnalyticsPanel'
 import { LegendDot, LegendBox } from '../components/map/MapLegend'
-import { LAYER_DEFS, SAFE_SITE_COLOR } from '../components/map/mapLayerDefs'
+import { LAYER_DEFS, RELIEF_SITE_COLOR } from '../components/map/mapLayerDefs'
 import { computeOverviewMetrics, shelters, hospitals, schools } from '../data/dashboard'
 import { safeSites } from '../data/safeSites'
 import { hazardZones, severityLevels } from '../data/hazards'
@@ -33,10 +33,17 @@ export default function AuthorityOverview() {
   const alerts = filterAlertsForRole(deriveAlerts({ habitations, safeSites, institutions, scenario, operations, coordinators, volunteers }), ROLES.DISASTER_AUTHORITY)
   const tickerItems = alerts.map((a) => `${a.type}: ${a.message}`)
 
-  const safeSiteMarkers = safeSites.map((s) => ({ id: s.id, type: 'site', shape: 'box', color: SAFE_SITE_COLOR, position: s.position, label: s.name }))
+  const reliefSiteMarkers = safeSites.map((s) => ({
+    id: s.id,
+    type: 'site',
+    shape: 'box',
+    color: RELIEF_SITE_COLOR,
+    position: s.position,
+    label: `${s.name} (Relief Site)`,
+  }))
   const markers = [
     ...(layers.population ? habitations.map((h) => ({ id: h.id, type: 'habitation', position: h.position, label: h.name, priority: h.risk.status })) : []),
-    ...(layers.safeSites ? safeSiteMarkers : []),
+    ...(layers.safeSites ? reliefSiteMarkers : []),
     ...(layers.infrastructure ? [...shelters, ...hospitals, ...schools].map((m) => ({ id: m.id, type: m.type, position: m.position, label: m.name })) : []),
   ]
 
@@ -71,7 +78,7 @@ export default function AuthorityOverview() {
           showHazards={layers.hazards}
           onMarkerClick={(m) => {
             if (m.type === 'habitation') openHabitation(m.id)
-            if (m.type === 'site') navigate('/app/safe-sites')
+            if (m.type === 'site') navigate('/app/relief-sites')
           }}
         />
 
@@ -111,7 +118,7 @@ export default function AuthorityOverview() {
             <LegendDot key={s.id} color={s.color} label={s.label} />
           ))}
           <span className="h-3.5 w-px bg-slate-300 dark:bg-slate-600" />
-          <LegendBox color={SAFE_SITE_COLOR} label="Safe Sites" />
+          <LegendBox color={RELIEF_SITE_COLOR} label="Relief Sites" />
         </div>
 
         <AnalyticsPanel open={analyticsOpen} onClose={() => setAnalyticsOpen(false)} metrics={analyticsMetrics} />

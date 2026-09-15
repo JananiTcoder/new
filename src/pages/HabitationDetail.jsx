@@ -31,22 +31,28 @@ import { useAppState } from '../state/AppStateContext'
 import { getHazardType, OPERATION_STATUS } from '../types/geosentra'
 
 const STATUS_ACTION = {
-  [OPERATION_STATUS.YET_TO_PLAN_RESCUE]: { label: 'Plan Relocation', icon: ListChecks },
-  [OPERATION_STATUS.PLANNING]: { label: 'Continue Planning', icon: ListChecks },
+  [OPERATION_STATUS.YET_TO_PLAN_RESCUE]: { label: 'Assign Emergency Coordinator', icon: ListChecks },
+  [OPERATION_STATUS.PLANNING]: { label: 'Assign Emergency Coordinator', icon: ListChecks },
+  [OPERATION_STATUS.ASSIGNED]: { label: 'View Operation', icon: Eye },
+  [OPERATION_STATUS.DISPATCHED]: { label: 'View Operation', icon: Eye },
+  [OPERATION_STATUS.EN_ROUTE]: { label: 'View Operation', icon: Eye },
+  [OPERATION_STATUS.ARRIVED]: { label: 'View Operation', icon: Eye },
+  [OPERATION_STATUS.IN_PROGRESS]: { label: 'View Operation', icon: Eye },
+  [OPERATION_STATUS.COMPLETED]: { label: 'View Completed Operation', icon: CheckCircle2 },
   [OPERATION_STATUS.TEAM_ASSIGNMENT_PENDING]: { label: 'View Assignment', icon: Eye },
   [OPERATION_STATUS.TEAM_ASSIGNED]: { label: 'View Operation', icon: Eye },
   [OPERATION_STATUS.OPERATION_ACTIVE]: { label: 'View Operation', icon: Eye },
   [OPERATION_STATUS.PARTIALLY_RELOCATED]: { label: 'Continue Operation', icon: Eye },
   [OPERATION_STATUS.RELOCATION_COMPLETED]: { label: 'View Completed Operation', icon: CheckCircle2 },
   [OPERATION_STATUS.OPERATION_CLOSED]: { label: 'View History', icon: History },
-  [OPERATION_STATUS.ASSIGNMENT_REJECTED]: { label: 'Reassign Team', icon: RefreshCw },
-  [OPERATION_STATUS.TEAM_UNAVAILABLE]: { label: 'Reassign Team', icon: RefreshCw },
+  [OPERATION_STATUS.ASSIGNMENT_REJECTED]: { label: 'Reassign Coordinator', icon: RefreshCw },
+  [OPERATION_STATUS.TEAM_UNAVAILABLE]: { label: 'Reassign Coordinator', icon: RefreshCw },
   [OPERATION_STATUS.OPERATION_CANCELLED]: { label: 'View Operation', icon: Eye },
   [OPERATION_STATUS.OPERATION_FAILED]: { label: 'View Operation', icon: Eye },
   [OPERATION_STATUS.REASSIGNMENT]: { label: 'View Operation', icon: Eye },
 }
 
-const RESUME_STEP_PATH = { 0: '/app/relocation', 1: '/app/relocation', 2: '/app/infrastructure', 3: '/app/relocation/team', 4: '/app/routes', 5: '/app/relocation/validate' }
+const RESUME_STEP_PATH = { 0: '/app/assign-coordinator', 1: '/app/assign-coordinator', 2: '/app/relief-sites', 3: '/app/assign-coordinator', 4: '/app/routes', 5: '/app/operations' }
 
 function nearestHazardZone(habitation) {
   const candidates = hazardZones.filter((z) => habitation.hazards.includes(z.type))
@@ -71,16 +77,14 @@ export default function HabitationDetail() {
   const statusChange = computeStatusChangeFor(habitation)
   const operation = getOperationForHabitation(habitation.id)
   const status = operation?.status || OPERATION_STATUS.YET_TO_PLAN_RESCUE
-  const action = STATUS_ACTION[status]
+  const action = STATUS_ACTION[status] || { label: 'Assign Emergency Coordinator', icon: ListChecks }
   const zone = nearestHazardZone(habitation)
   const vulnerablePopulation = habitation.vulnerability.elderly + habitation.vulnerability.children + habitation.vulnerability.disabled
 
   const handlePrimaryAction = () => {
-    if (status === OPERATION_STATUS.YET_TO_PLAN_RESCUE) {
+    if (status === OPERATION_STATUS.YET_TO_PLAN_RESCUE || status === OPERATION_STATUS.PLANNING || !operation) {
       ensurePlanning(habitation.id)
-      navigate('/app/relocation')
-    } else if (status === OPERATION_STATUS.PLANNING) {
-      navigate(RESUME_STEP_PATH[planningStepIndex(operation)] || '/app/relocation')
+      navigate(`/app/assign-coordinator/${habitation.id}`)
     } else {
       navigate(`/app/operations/${habitation.id}`)
     }
@@ -179,13 +183,13 @@ export default function HabitationDetail() {
             <StatRow icon={Accessibility} label="Persons with Disabilities" value={habitation.vulnerability.disabled.toLocaleString()} />
           </Card>
 
-          {/* RELOCATION */}
+          {/* EMERGENCY RESPONSE */}
           <Card className="p-5 space-y-3">
-            <SectionHeader icon={ListChecks} title="Relocation" />
-            <StatRow label="Relocation" value={operation ? 'Assigned' : 'Yet to assign'} />
-            <StatRow label="Relocation Required" value={risk.status !== 'Normal' ? 'Yes' : 'No'} />
-            <StatRow label="Priority" value={risk.relocationTimeframe} />
-            <StatRow label="People Requiring Relocation" value={(operation?.populationRequiring ?? (risk.redZone ? habitation.population : 0)).toLocaleString()} />
+            <SectionHeader icon={ListChecks} title="Emergency Response" />
+            <StatRow label="Emergency Coordinator" value={operation?.coordinatorName || (operation ? 'Assigned' : 'Yet to assign')} />
+            <StatRow label="Relief Operation Required" value={risk.status !== 'Normal' ? 'Yes' : 'No'} />
+            <StatRow label="Response Priority" value={risk.relocationTimeframe} />
+            <StatRow label="People Requiring Relief" value={(operation?.populationRequiring ?? (risk.redZone ? habitation.population : 0)).toLocaleString()} />
             <StatRow label="Current Operation Status" value={status} />
             <StatRow label="Existing Operation ID" value={operation?.id || 'None'} />
           </Card>

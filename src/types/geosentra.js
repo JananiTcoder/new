@@ -86,14 +86,23 @@ export const ALERT_STATUS = {
 // rest of this app treats "no record" as the initial state rather than
 // duplicating that as a stored value. ----
 export const OPERATION_STATUS = {
-  YET_TO_PLAN_RESCUE: 'Yet to Plan Rescue',
+  // Canonical Coordinator & Flutter lifecycle statuses
+  ASSIGNED: 'Assigned',
+  DISPATCHED: 'Dispatched',
+  EN_ROUTE: 'En Route',
+  ARRIVED: 'Arrived',
+  IN_PROGRESS: 'In Progress',
+  COMPLETED: 'Completed',
+
+  // Prior workflow aliases / legacy states
+  YET_TO_PLAN_RESCUE: 'Yet to Assign',
   PLANNING: 'Planning',
-  TEAM_ASSIGNMENT_PENDING: 'Team Assignment Pending',
-  TEAM_ASSIGNED: 'Team Assigned',
-  OPERATION_ACTIVE: 'Operation Active',
-  PARTIALLY_RELOCATED: 'Partially Relocated',
-  RELOCATION_COMPLETED: 'Relocation Completed',
-  OPERATION_CLOSED: 'Operation Closed',
+  TEAM_ASSIGNMENT_PENDING: 'Assigned',
+  TEAM_ASSIGNED: 'Dispatched',
+  OPERATION_ACTIVE: 'In Progress',
+  PARTIALLY_RELOCATED: 'In Progress',
+  RELOCATION_COMPLETED: 'Completed',
+  OPERATION_CLOSED: 'Completed',
   ASSIGNMENT_REJECTED: 'Assignment Rejected',
   OPERATION_CANCELLED: 'Operation Cancelled',
   OPERATION_FAILED: 'Operation Failed',

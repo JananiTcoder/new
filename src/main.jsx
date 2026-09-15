@@ -9,6 +9,7 @@ import { AppStateProvider } from './state/AppStateContext.jsx'
 import { AuthProvider } from './auth/AuthContext.jsx'
 import { ProviderDataProvider } from './provider/providerStore.jsx'
 import { ProviderAuthProvider } from './provider/ProviderAuthContext.jsx'
+import './api/coordinatorApi'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

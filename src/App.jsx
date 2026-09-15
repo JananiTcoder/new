@@ -8,6 +8,7 @@ import HazardIntelligence from './pages/HazardIntelligence'
 import Habitations from './pages/Habitations'
 import HabitationDetail from './pages/HabitationDetail'
 import Relocation from './pages/Relocation'
+import AssignCoordinator from './pages/AssignCoordinator'
 import SafeSites from './pages/SafeSites'
 import Infrastructure from './pages/Infrastructure'
 import RelocationPlanner from './pages/RelocationPlanner'
@@ -119,10 +120,38 @@ export default function App() {
           }
         />
         <Route
-          path="relocation"
+          path="assign-coordinator"
           element={
-            <RoleRoute pageId="relocation">
-              <Relocation />
+            <RoleRoute pageId="assign-coordinator">
+              <AssignCoordinator />
+            </RoleRoute>
+          }
+        />
+        <Route
+          path="assign-coordinator/:habitationId"
+          element={
+            <RoleRoute pageId="assign-coordinator">
+              <AssignCoordinator />
+            </RoleRoute>
+          }
+        />
+        <Route
+          path="relocation"
+          element={<Navigate to="/app/operations" replace />}
+        />
+        <Route
+          path="relief-sites"
+          element={
+            <RoleRoute pageId="sites">
+              <SafeSitesRoute />
+            </RoleRoute>
+          }
+        />
+        <Route
+          path="relief-sites/:id"
+          element={
+            <RoleRoute pageId="sites">
+              <CitizenSafeSiteDetail />
             </RoleRoute>
           }
         />

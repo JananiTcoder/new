@@ -72,19 +72,19 @@ function StandardDashboard() {
     .map((o) => ({ operation: o, habitation: habitations.find((h) => h.id === o.habitationId) }))
     .filter((row) => row.habitation)
 
-  // Safe sites render as green box markers everywhere on the Overview map so
+  // Relief sites render as green box markers everywhere on the Overview map so
   // they read as clearly distinct from habitation/hazard/infrastructure pins.
-  const safeSiteMarkers = safeSites.map((s) => ({ id: s.id, type: 'site', shape: 'box', color: SAFE_SITE_COLOR, position: s.position, label: s.name }))
+  const reliefSiteMarkers = safeSites.map((s) => ({ id: s.id, type: 'site', shape: 'box', color: SAFE_SITE_COLOR, position: s.position, label: `${s.name} (Relief Site)` }))
 
   const markers = isCoordinator
     ? [
         ...(layers.population ? habitations.map((h) => ({ id: h.id, type: 'habitation', position: h.position, label: h.name, priority: h.risk.status })) : []),
-        ...(layers.safeSites ? safeSiteMarkers : []),
+        ...(layers.safeSites ? reliefSiteMarkers : []),
         ...(layers.infrastructure ? [...shelters, ...hospitals, ...schools].map((m) => ({ id: m.id, type: m.type, position: m.position, label: m.name })) : []),
       ]
     : isVolunteer
-    ? [{ id: myInstitution.id, type: 'institution', position: myInstitution.position, label: myInstitution.name }, ...safeSiteMarkers]
-    : [{ id: myHabitation.id, type: 'habitation', position: myHabitation.position, label: 'Your area', priority: myHabitation.risk.status }, ...safeSiteMarkers]
+    ? [{ id: myInstitution.id, type: 'institution', position: myInstitution.position, label: myInstitution.name }, ...reliefSiteMarkers]
+    : [{ id: myHabitation.id, type: 'habitation', position: myHabitation.position, label: 'Your area', priority: myHabitation.risk.status }, ...reliefSiteMarkers]
 
   const priorityHabitations = [...habitations]
     .filter((h) => h.risk.status === REDZONE_STATUS.CRITICAL || h.risk.status === REDZONE_STATUS.HIGH_RISK)
@@ -228,7 +228,7 @@ function StandardDashboard() {
               <LegendDot key={s.id} color={s.color} label={s.label} />
             ))}
             <span className="h-3.5 w-px bg-slate-300 dark:bg-slate-600" />
-            <LegendBox color={SAFE_SITE_COLOR} label="Safe Sites" />
+            <LegendBox color={SAFE_SITE_COLOR} label="Relief Sites" />
           </div>
         </Card>
 
@@ -306,18 +306,16 @@ function StandardDashboard() {
 
           {isCitizen && (
             <Card className="p-5">
-              <h3 className="font-bold text-slate-900 dark:text-slate-100 mb-3 flex items-center gap-1.5">
-                <ShieldCheck size={16} className="text-emerald-500" /> Emergency Instructions
+              <h3 className="font-bold text-slate-900 dark:text-slate-100 mb-1 flex items-center gap-2">
+                <MapPin size={16} className="text-blue-600 dark:text-blue-400" /> Need Help Moving?
               </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
-                If conditions worsen, move to your nearest safe site using the recommended route. Keep this app open for live alerts.
-              </p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">Find the safest verified path to a relief shelter or safe destination.</p>
               <div className="grid grid-cols-1 gap-2">
                 <Button size="sm" onClick={() => navigate('/app/routes')}>
                   <Navigation size={14} /> Find Safest Route
                 </Button>
-                <Button variant="secondary" size="sm" onClick={() => navigate('/app/safe-sites')}>
-                  Nearby Safe Sites
+                <Button variant="secondary" size="sm" onClick={() => navigate('/app/relief-sites')}>
+                  Nearby Relief Sites
                 </Button>
               </div>
             </Card>
