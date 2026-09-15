@@ -19,6 +19,8 @@ const MARKER_COLOR = {
   shelter: '#0891b2',
   origin: '#1d4ed8',
   destination: '#059669',
+  coordinator: '#2563eb',
+  volunteer: '#9333ea',
 }
 
 const SEVERITY_STYLE = {
@@ -49,6 +51,43 @@ function boxIcon(color, big) {
     <div class="geo-box" style="width:${size}px;height:${size}px;background:${color};border:2.5px solid white;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;">
       <svg width="${Math.round(size * 0.5)}" height="${Math.round(size * 0.5)}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M4 12.5L9.5 18L20 6" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>`
+  return L.divIcon({ html, className: '', iconSize: [size, size], iconAnchor: [size / 2, size / 2] })
+}
+
+function shelterIcon(color = '#059669', big) {
+  const size = big ? 28 : 22
+  const html = `
+    <div class="geo-shelter" style="width:${size}px;height:${size}px;background:${color};border:2px solid white;border-radius:6px;box-shadow:0 2px 6px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;">
+      <svg width="${Math.round(size * 0.55)}" height="${Math.round(size * 0.55)}" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>`
+  return L.divIcon({ html, className: '', iconSize: [size, size], iconAnchor: [size / 2, size / 2] })
+}
+
+function coordinatorIcon(color = '#2563eb', big) {
+  const size = big ? 28 : 22
+  const html = `
+    <div class="geo-coordinator" style="width:${size}px;height:${size}px;background:${color};border:2px solid white;border-radius:9999px;box-shadow:0 2px 6px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;">
+      <svg width="${Math.round(size * 0.55)}" height="${Math.round(size * 0.55)}" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    </div>`
+  return L.divIcon({ html, className: '', iconSize: [size, size], iconAnchor: [size / 2, size / 2] })
+}
+
+function volunteerIcon(color = '#9333ea', big) {
+  const size = big ? 28 : 22
+  const html = `
+    <div class="geo-volunteer" style="width:${size}px;height:${size}px;background:${color};border:2px solid white;border-radius:9999px;box-shadow:0 2px 6px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;">
+      <svg width="${Math.round(size * 0.55)}" height="${Math.round(size * 0.55)}" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
       </svg>
     </div>`
   return L.divIcon({ html, className: '', iconSize: [size, size], iconAnchor: [size / 2, size / 2] })
@@ -157,6 +196,7 @@ export default function GeoMap({
 
         {routes.map((r) => {
           const isSelected = selectedRouteId ? r.id === selectedRouteId : true
+          const isAlternative = r.isAlternative || (selectedRouteId && !isSelected)
           return (
             <Polyline
               key={r.id}
@@ -164,9 +204,10 @@ export default function GeoMap({
               pathOptions={{
                 color: r.color,
                 weight: isSelected ? 5.5 : 3.5,
-                opacity: selectedRouteId ? (isSelected ? 0.95 : 0.35) : 0.9,
+                opacity: selectedRouteId ? (isSelected ? 0.95 : 0.45) : 0.9,
                 lineCap: 'round',
                 lineJoin: 'round',
+                dashArray: r.dashArray || (isAlternative ? '6, 8' : undefined),
               }}
               eventHandlers={{ click: () => onRouteClick?.(r.id) }}
             />
@@ -186,24 +227,36 @@ export default function GeoMap({
         )}
 
         {showMarkers &&
-          markers.map((m) => (
-            <Marker
-              key={m.id}
-              position={[m.position.lat, m.position.lng]}
-              icon={
-                m.shape === 'box'
-                  ? boxIcon(m.color || MARKER_COLOR[m.type] || '#2563eb', selectedMarkerId === m.id)
-                  : pinIcon(m.color || MARKER_COLOR[m.type] || '#2563eb', selectedMarkerId === m.id)
-              }
-              eventHandlers={{ click: () => onMarkerClick?.(m) }}
-            >
-              {m.label && (
-                <Tooltip direction="top" offset={[0, -28]} opacity={1}>
-                  {m.label}
-                </Tooltip>
-              )}
-            </Marker>
-          ))}
+          markers.map((m) => {
+            const isSelected = selectedMarkerId === m.id
+            let icon
+            if (m.shape === 'coordinator' || m.type === 'coordinator') {
+              icon = coordinatorIcon(m.color || MARKER_COLOR.coordinator, isSelected)
+            } else if (m.shape === 'volunteer' || m.type === 'volunteer') {
+              icon = volunteerIcon(m.color || MARKER_COLOR.volunteer, isSelected)
+            } else if (m.shape === 'shelter' || m.shape === 'site' || m.type === 'site' || m.type === 'safeSite') {
+              icon = shelterIcon(m.color || MARKER_COLOR.site, isSelected)
+            } else if (m.shape === 'box') {
+              icon = boxIcon(m.color || MARKER_COLOR[m.type] || '#2563eb', isSelected)
+            } else {
+              icon = pinIcon(m.color || MARKER_COLOR[m.type] || '#2563eb', isSelected)
+            }
+
+            return (
+              <Marker
+                key={m.id}
+                position={[m.position.lat, m.position.lng]}
+                icon={icon}
+                eventHandlers={{ click: () => onMarkerClick?.(m) }}
+              >
+                {m.label && (
+                  <Tooltip direction="top" offset={[0, -28]} opacity={1}>
+                    {m.label}
+                  </Tooltip>
+                )}
+              </Marker>
+            )
+          })}
       </MapContainer>
     </div>
   )

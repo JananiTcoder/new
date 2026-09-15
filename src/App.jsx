@@ -13,6 +13,7 @@ import Infrastructure from './pages/Infrastructure'
 import RelocationPlanner from './pages/RelocationPlanner'
 import RouteIntelligence from './pages/RouteIntelligence'
 import PlannerDetails from './pages/relocation-planner/PlannerDetails'
+import SiteDetails from './pages/relocation-planner/SiteDetails'
 import ChooseSite from './pages/relocation-planner/ChooseSite'
 import OperationStatusPage from './pages/relocation-planner/OperationStatusPage'
 import RescueTeam from './pages/RescueTeam'
@@ -171,10 +172,34 @@ export default function App() {
           }
         />
         <Route
+          path="routes/site/:siteId"
+          element={
+            <RoleRoute pageId="routes-plan">
+              <SiteDetails />
+            </RoleRoute>
+          }
+        />
+        <Route
+          path="routes/site/:siteId/assign"
+          element={
+            <RoleRoute pageId="routes-plan">
+              <ChooseSite />
+            </RoleRoute>
+          }
+        />
+        <Route
+          path="routes/operation/:operationId"
+          element={
+            <RoleRoute pageId="routes-plan">
+              <OperationStatusPage />
+            </RoleRoute>
+          }
+        />
+        <Route
           path="routes/details"
           element={
             <RoleRoute pageId="routes-plan">
-              <PlannerDetails />
+              <SiteDetails />
             </RoleRoute>
           }
         />
