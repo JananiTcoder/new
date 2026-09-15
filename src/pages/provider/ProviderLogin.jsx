@@ -35,7 +35,7 @@ export default function ProviderLogin() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 dark:from-slate-900 via-white dark:via-slate-950 to-white dark:to-slate-950 flex flex-col">
       <header className="px-5 lg:px-8 h-16 flex items-center justify-between">
-        <button onClick={() => navigate('/role-select')} className="flex items-center gap-2.5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors">
+        <button onClick={() => navigate('/')} className="flex items-center gap-2.5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors">
           <ArrowLeft size={16} />
           <span className="text-sm font-medium">Back</span>
         </button>

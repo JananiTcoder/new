@@ -54,7 +54,7 @@ export default function Settings() {
 
   const handleSignOut = () => {
     logout()
-    navigate('/role-select')
+    navigate('/disaster-authority/login')
   }
 
   return (

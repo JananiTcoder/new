@@ -27,7 +27,7 @@ export default function MobileNav() {
   const handleLogout = () => {
     setMoreOpen(false)
     logout()
-    navigate('/role-select')
+    navigate('/disaster-authority/login')
   }
 
   return (

@@ -8,7 +8,7 @@ import AccessRestricted from '../components/ui/AccessRestricted'
 export function RequireSession({ children }) {
   const { isAuthenticated } = useAuth()
   const location = useLocation()
-  if (!isAuthenticated) return <Navigate to="/role-select" state={{ from: location }} replace />
+  if (!isAuthenticated) return <Navigate to="/disaster-authority/login" state={{ from: location }} replace />
   return children
 }
 

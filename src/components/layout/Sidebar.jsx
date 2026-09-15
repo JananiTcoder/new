@@ -70,7 +70,7 @@ export default function Sidebar({ collapsed = false, onToggleCollapse, mobileOpe
   const handleLogout = (closeMobile) => {
     closeMobile?.()
     logout()
-    navigate('/role-select')
+    navigate('/disaster-authority/login')
   }
 
   return (

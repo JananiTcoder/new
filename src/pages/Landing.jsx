@@ -86,7 +86,7 @@ export default function Landing() {
                 </div>
               </div>
               <button 
-                onClick={() => navigate('/role-select')}
+                onClick={() => navigate('/disaster-authority/login')}
                 className="shrink-0 h-10 w-10 sm:w-auto sm:px-4 rounded-full bg-white text-[#153a6b] text-sm font-semibold flex items-center justify-center gap-2 group-hover:bg-blue-50 transition-colors mt-4 sm:mt-0"
               >
                 <span className="hidden sm:inline">Access Portal</span> <ArrowRight size={18} />

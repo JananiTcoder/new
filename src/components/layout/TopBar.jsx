@@ -119,7 +119,7 @@ export default function TopBar({ onMenuClick }) {
             <button
               onClick={() => {
                 logout()
-                navigate('/role-select')
+                navigate('/disaster-authority/login')
               }}
               className="w-full text-left px-3 py-2 rounded-xl hover:bg-slate-50 dark:hover:bg-white/5 text-sm text-slate-600 dark:text-slate-300"
             >
