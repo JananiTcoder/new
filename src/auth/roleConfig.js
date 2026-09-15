@@ -29,10 +29,10 @@ export const ROLE_DESCRIPTIONS = {
 // Demo-only mock identities — no passwords, no real auth. Selecting a role
 // card in RoleSelect.jsx logs in as this user.
 export const MOCK_USERS = {
-  [ROLES.DISASTER_AUTHORITY]: { name: 'Disaster Authority', role: ROLES.DISASTER_AUTHORITY, email: 'authority@geosentra.demo' },
-  [ROLES.VOLUNTEERS]: { name: 'Volunteer Coordinator', role: ROLES.VOLUNTEERS, email: 'volunteers@geosentra.demo' },
-  [ROLES.CITIZEN]: { name: 'Citizen User', role: ROLES.CITIZEN, email: 'citizen@geosentra.demo' },
-  [ROLES.EMERGENCY_COORDINATOR]: { name: 'Emergency Coordinator', role: ROLES.EMERGENCY_COORDINATOR, email: 'coordinator@geosentra.demo' },
+  [ROLES.DISASTER_AUTHORITY]: { name: 'Arun Kumar (Disaster Authority)', role: ROLES.DISASTER_AUTHORITY, email: 'authority@geosentra.gov.in' },
+  [ROLES.VOLUNTEERS]: { name: 'Karthikeyan S. (Volunteer Lead)', role: ROLES.VOLUNTEERS, email: 'volunteers@geosentra.gov.in' },
+  [ROLES.CITIZEN]: { name: 'Priya Srinivasan (Citizen)', role: ROLES.CITIZEN, email: 'citizen@geosentra.gov.in' },
+  [ROLES.EMERGENCY_COORDINATOR]: { name: 'Meena Krishnan (EOC Coordinator)', role: ROLES.EMERGENCY_COORDINATOR, email: 'coordinator@geosentra.gov.in' },
 }
 
 // Page ids match src/data/nav.js item ids (plus 'habitations' also covering

@@ -36,8 +36,8 @@ export const seedAuditEvents = [
     type: AUDIT_EVENT_TYPE.PLAN_CREATED,
     relatedId: 'kovalam-east',
     previousValue: null,
-    newValue: 'Community Development Zone (94% match)',
-    reason: 'Relocation matcher identified Community Development Zone as best match.',
+    newValue: 'Tambaram Emergency Shelter (94% match)',
+    reason: 'Relocation matcher identified Tambaram Emergency Shelter as best match.',
     severity: ALERT_SEVERITY.INFO,
     actor: 'System — Relocation Matcher (mock)',
   },
@@ -83,6 +83,6 @@ export const seedAuditEvents = [
     newValue: '82% ready',
     reason: 'Institution evacuation checklist updated.',
     severity: ALERT_SEVERITY.INFO,
-    actor: 'Govt. Higher Secondary School — Admin',
+    actor: 'Government Higher Secondary School, Kovalam — Admin',
   },
 ]

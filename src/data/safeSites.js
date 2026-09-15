@@ -13,9 +13,9 @@
 export const safeSites = [
   {
     id: 'community-dev-zone',
-    name: 'Community Development Zone',
+    name: 'Tambaram Emergency Shelter',
     type: 'Planned Relocation Site',
-    district: 'Eastern District',
+    district: 'Tambaram / Central District',
     position: { lat: 12.901, lng: 80.19 },
     safetyScoreBase: 92,
     currentOccupancy: 650,
@@ -28,7 +28,7 @@ export const safeSites = [
   },
   {
     id: 'riverside-relief',
-    name: 'Riverside Relief Zone',
+    name: 'Chennai Corporation Relief Centre — Kotturpuram',
     type: 'Temporary Relief Camp',
     district: 'Central District',
     position: { lat: 12.995, lng: 80.235 },
@@ -43,7 +43,7 @@ export const safeSites = [
   },
   {
     id: 'northern-township',
-    name: 'Northern Township',
+    name: 'Chennai Coastal Emergency Shelter — North',
     type: 'Planned Relocation Site',
     district: 'Northern District',
     position: { lat: 13.06, lng: 80.22 },
@@ -58,7 +58,7 @@ export const safeSites = [
   },
   {
     id: 'sunrise-relocation-park',
-    name: 'Sunrise Relocation Park',
+    name: 'Chromepet Community Relief Centre',
     type: 'Planned Relocation Site',
     district: 'Central District',
     position: { lat: 12.945, lng: 80.195 },
@@ -73,7 +73,7 @@ export const safeSites = [
   },
   {
     id: 'lakeview-shelter-complex',
-    name: 'Lakeview Shelter Complex',
+    name: 'Lakeview Emergency Relief Centre — Sholinganallur',
     type: 'Emergency Shelter',
     district: 'Coastal District',
     position: { lat: 12.98, lng: 80.245 },
@@ -88,7 +88,7 @@ export const safeSites = [
   },
   {
     id: 'eastern-highlands',
-    name: 'Eastern Highlands Site',
+    name: 'Government Higher Secondary School Relief Centre — Pallavaram',
     type: 'Planned Relocation Site',
     district: 'Eastern Hills District',
     position: { lat: 12.97, lng: 80.135 },

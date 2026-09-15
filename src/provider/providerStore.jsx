@@ -79,6 +79,10 @@ export function ProviderDataProvider({ children }) {
 
   const verifyCredentials = useCallback(
     (username, password) => {
+      // Support standard static prototype credentials RP001 / GeoSentra@123
+      if (String(username).trim().toUpperCase() === 'RP001' && password === 'GeoSentra@123') {
+        return providers[0] || null
+      }
       const match = providers.find((p) => p.username.trim().toLowerCase() === String(username).trim().toLowerCase())
       if (!match) return null
       if (match.passwordDemo !== btoa(password)) return null

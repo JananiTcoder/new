@@ -176,24 +176,24 @@ export function computeOperationalStatusLabel(operations) {
 }
 
 export const currentEvent = {
-  name: 'Monsoon Advisory — Flood, Landslide & Cloudburst',
+  name: 'Chennai Monsoon Advisory — Urban Inundation & Coastal Surge',
   severity: 'HIGH',
-  region: 'Coastal & Eastern Districts',
+  region: 'Chennai & Chengalpattu Coastal Districts',
   updated: '18 minutes ago',
 }
 
 export const shelters = [
-  { id: 'sh-1', name: 'Community Relief Center', position: { lat: 12.902, lng: 80.192 }, type: 'shelter' },
-  { id: 'sh-2', name: 'Riverside Relief Zone', position: { lat: 12.995, lng: 80.235 }, type: 'shelter' },
-  { id: 'sh-3', name: 'Lakeview Shelter Complex', position: { lat: 12.98, lng: 80.245 }, type: 'shelter' },
+  { id: 'sh-1', name: 'Tambaram Emergency Shelter', position: { lat: 12.902, lng: 80.192 }, type: 'shelter' },
+  { id: 'sh-2', name: 'Chennai Corporation Relief Centre — Kotturpuram', position: { lat: 12.995, lng: 80.235 }, type: 'shelter' },
+  { id: 'sh-3', name: 'Lakeview Emergency Relief Centre — Sholinganallur', position: { lat: 12.98, lng: 80.245 }, type: 'shelter' },
 ]
 
 export const hospitals = [
-  { id: 'hp-1', name: 'District General Hospital', position: { lat: 12.92, lng: 80.225 }, type: 'hospital' },
-  { id: 'hp-2', name: 'Community Health Center', position: { lat: 12.895, lng: 80.13 }, type: 'hospital' },
+  { id: 'hp-1', name: 'Rajiv Gandhi Government General Hospital', position: { lat: 12.92, lng: 80.225 }, type: 'hospital' },
+  { id: 'hp-2', name: 'Government Hospital — Chromepet', position: { lat: 12.895, lng: 80.13 }, type: 'hospital' },
 ]
 
 export const schools = [
-  { id: 'sc-1', name: 'Govt. Higher Secondary School', position: { lat: 12.842, lng: 80.24 }, type: 'school' },
-  { id: 'sc-2', name: 'Northern Public School', position: { lat: 13.05, lng: 80.21 }, type: 'school' },
+  { id: 'sc-1', name: 'Government Higher Secondary School — Kovalam', position: { lat: 12.842, lng: 80.24 }, type: 'school' },
+  { id: 'sc-2', name: 'Chennai Corporation Higher Secondary School — Madhavaram', position: { lat: 13.05, lng: 80.21 }, type: 'school' },
 ]

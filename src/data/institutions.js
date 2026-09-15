@@ -10,7 +10,7 @@ import { INSTITUTION_TYPES, RELOCATION_TIMEFRAME } from '../types/geosentra'
 export const institutions = [
   {
     id: 'govt-hss',
-    name: 'Govt. Higher Secondary School',
+    name: 'Government Higher Secondary School, Kovalam',
     type: INSTITUTION_TYPES.SCHOOL,
     district: 'Coastal District',
     position: { lat: 12.842, lng: 80.24 },
@@ -37,7 +37,7 @@ export const institutions = [
   },
   {
     id: 'coastal-degree-college',
-    name: 'Coastal Degree College',
+    name: 'Government Arts & Science College, Kovalam',
     type: INSTITUTION_TYPES.COLLEGE,
     district: 'Coastal District',
     position: { lat: 12.965, lng: 80.25 },
@@ -62,7 +62,7 @@ export const institutions = [
   },
   {
     id: 'district-general-hospital',
-    name: 'District General Hospital',
+    name: 'Rajiv Gandhi Government General Hospital',
     type: INSTITUTION_TYPES.HOSPITAL,
     district: 'Central District',
     position: { lat: 12.92, lng: 80.225 },
@@ -88,7 +88,7 @@ export const institutions = [
   },
   {
     id: 'sunrise-care-home',
-    name: 'Sunrise Care Home',
+    name: 'Karunai Senior Care Home — Pallavaram',
     type: INSTITUTION_TYPES.CARE_HOME,
     district: 'Eastern Hills District',
     position: { lat: 12.95, lng: 80.16 },
@@ -111,7 +111,7 @@ export const institutions = [
   },
   {
     id: 'lakeview-community-center',
-    name: 'Lakeview Community Center',
+    name: 'Chennai Corporation Community Centre — Sholinganallur',
     type: INSTITUTION_TYPES.COMMUNITY_CENTER,
     district: 'Coastal District',
     position: { lat: 12.982, lng: 80.243 },
