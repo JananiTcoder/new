@@ -1,338 +1,197 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
-  Compass,
-  ArrowRight,
-  PlayCircle,
-  Users,
-  Target,
-  MoveRight,
-  RefreshCw,
-  ShieldCheck,
-  Route,
-  Layers,
-  GitBranch,
-  Sun,
-  Moon,
-  Menu,
-  X,
-  MapPinned,
-  Radio,
+  Search,
+  ShieldAlert,
   Building2,
-  Phone,
-  Mail,
+  ArrowRight,
+  Compass
 } from 'lucide-react'
-import GeoMap from '../components/map/GeoMap'
-import { habitations } from '../data/habitations'
-import { safeSites } from '../data/safeSites'
-import { hazardZones } from '../data/hazards'
-import { routeGeometry } from '../data/routes'
-import { coordinators } from '../data/coordinators'
-import { volunteers } from '../data/volunteers'
-import Button from '../components/ui/Button'
-import Card from '../components/ui/Card'
-import Brand from '../components/ui/Brand'
-import { useTheme } from '../context/ThemeContext'
-
-const pipeline = [
-  { n: '01', title: 'DETECT', desc: 'Identify multi-hazard risk.', icon: Target },
-  { n: '02', title: 'UNDERSTAND', desc: 'Understand vulnerable people and infrastructure.', icon: Users },
-  { n: '03', title: 'DECIDE', desc: 'Find feasible relocation destinations.', icon: MapPinned },
-  { n: '04', title: 'MOVE', desc: 'Generate personalized safe routes.', icon: MoveRight },
-  { n: '05', title: 'ADAPT', desc: 'Recalculate when conditions change.', icon: RefreshCw },
-]
-
-const integrations = [
-  { icon: Layers, title: 'Multi-Hazard Risk', desc: 'Landslide, flood, coastal erosion and cloudburst fused into one score.' },
-  { icon: Users, title: 'Vulnerable Population Profiling', desc: 'Elderly, children, disabled residents and healthcare dependency weighted per habitation.' },
-  { icon: Route, title: 'Profile-Aware Routing', desc: 'The safest route for a child is not the safest route for a vehicle.' },
-  { icon: ShieldCheck, title: 'Capacity & Feasibility', desc: 'Safe destinations checked against water, healthcare, housing and road capacity.' },
-  { icon: GitBranch, title: 'Relocation Planning', desc: 'Phased, explainable relocation plans with what-if simulation.' },
-  { icon: Compass, title: 'Explainable & Auditable', desc: 'Every recommendation comes with reasons, confidence and a decision trail.' },
-]
-
-const navLinks = [
-  { id: 'about', label: 'About' },
-  { id: 'resources', label: 'Resources' },
-  { id: 'support', label: 'Support' },
-  { id: 'contact', label: 'Contact' },
-]
 
 export default function Landing() {
   const navigate = useNavigate()
-  const { theme, toggleTheme } = useTheme()
-  const [menuOpen, setMenuOpen] = useState(false)
-
-  const scrollTo = (id) => {
-    setMenuOpen(false)
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
-  // Real counts from the platform's own data, not fabricated figures — every
-  // number here reads from the same data files every dashboard page uses.
-  const totalPopulationMonitored = habitations.reduce((sum, h) => sum + h.population, 0)
-  const responsePersonnel = coordinators.length + volunteers.length
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-x-hidden">
-      {/* Micro identity bar — describes the prototype, never claims to be an
-          official government system. */}
-      <div className="bg-slate-900 text-slate-300 text-[11px] font-medium">
-        <div className="max-w-7xl mx-auto px-5 lg:px-8 h-8 flex items-center justify-between gap-3">
-          <span className="truncate">Disaster Management Platform Prototype · Built for Smart India Hackathon 2026</span>
-          <span className="hidden sm:inline shrink-0">Frontend demo — no real government backend connected</span>
-        </div>
-      </div>
+    <div className="min-h-screen bg-white text-slate-900 overflow-x-hidden font-sans">
+      {/* HEADER */}
+      <header className="sticky top-0 z-40 bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-5 lg:px-8 h-20 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-6">
+            {/* Government Branding */}
+            <div className="flex items-center gap-4 pr-6 border-r border-slate-300">
+              <div className="flex items-center justify-center shrink-0 w-10">
+                 <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="Emblem of India" className="h-12 w-auto grayscale contrast-125" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-bold text-[#112a46] text-[15px] leading-tight">Government of India</span>
+                <span className="text-[12px] text-slate-600 leading-tight mt-0.5">Ministry of Home Affairs</span>
+                <span className="text-[12px] text-slate-600 leading-tight">National Disaster Management Authority</span>
+              </div>
+            </div>
 
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/95 dark:bg-slate-950/95 backdrop-blur border-b border-slate-200 dark:border-slate-800">
-        <div className="max-w-7xl mx-auto px-5 lg:px-8 h-16 flex items-center justify-between gap-4">
-          <Brand />
+            {/* GeoSentra Branding */}
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center shrink-0">
+                <Compass size={24} className="text-white" strokeWidth={2} />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-bold text-2xl text-[#1a4b85] leading-none tracking-tight">GeoSentra</span>
+                <span className="text-[11px] font-medium text-slate-500 leading-tight mt-1">Safer Communities. Stronger Tomorrow.</span>
+              </div>
+            </div>
+          </div>
 
-          <nav className="hidden lg:flex items-center gap-7">
-            {navLinks.map((l) => (
-              <button key={l.id} onClick={() => scrollTo(l.id)} className="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-400 transition-colors">
-                {l.label}
-              </button>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-5">
+            {/* Search Bar */}
+            <div className="relative hidden md:block">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search size={16} className="text-slate-400" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search..."
+                className="pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64 transition-all"
+              />
+            </div>
+            {/* Login Button */}
             <button
-              onClick={toggleTheme}
-              title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-              className="h-9 w-9 rounded-xl flex items-center justify-center text-slate-500 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors shrink-0"
+              onClick={() => navigate('/role-select')}
+              className="px-6 py-2.5 bg-[#153a6b] hover:bg-[#112a46] text-white text-sm font-semibold rounded-lg transition-colors shadow-sm"
             >
-              {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
-            </button>
-            <Button size="sm" onClick={() => navigate('/role-select')} className="hidden sm:inline-flex">
-              Login <ArrowRight size={15} />
-            </Button>
-            <button
-              onClick={() => setMenuOpen((v) => !v)}
-              className="lg:hidden h-9 w-9 rounded-xl flex items-center justify-center text-slate-500 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10"
-              aria-label="Toggle navigation menu"
-            >
-              {menuOpen ? <X size={19} /> : <Menu size={19} />}
+              Login
             </button>
           </div>
         </div>
-
-        {menuOpen && (
-          <div className="lg:hidden border-t border-slate-100 dark:border-slate-800 px-5 py-4 space-y-3 bg-white dark:bg-slate-950">
-            {navLinks.map((l) => (
-              <button key={l.id} onClick={() => scrollTo(l.id)} className="block w-full text-left text-sm font-semibold text-slate-600 dark:text-slate-300">
-                {l.label}
-              </button>
-            ))}
-            <Button size="sm" className="w-full sm:hidden" onClick={() => navigate('/role-select')}>
-              Login <ArrowRight size={15} />
-            </Button>
-          </div>
-        )}
       </header>
 
-      {/* Hero */}
-      <section className="relative pt-16 pb-20 lg:pt-24 lg:pb-28 px-5 lg:px-8">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-blue-50 dark:from-slate-900 via-white dark:via-slate-950 to-white dark:to-slate-950" />
-        <div className="absolute -top-20 -right-40 -z-10 h-[500px] w-[500px] rounded-full bg-blue-200/40 dark:bg-blue-500/10 blur-3xl" />
-        <div className="absolute top-40 -left-40 -z-10 h-[400px] w-[400px] rounded-full bg-cyan-200/30 dark:bg-cyan-500/10 blur-3xl" />
+      {/* HERO & STAKEHOLDER CARDS */}
+      <section className="relative w-full">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0 h-[500px] w-full overflow-hidden">
+          <img 
+            src="/hero_bg.jpg" 
+            alt="Disaster Response" 
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-[#0d2a4e]/70 mix-blend-multiply"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0d2a4e]/90 to-transparent"></div>
+          <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-white to-transparent"></div>
+        </div>
 
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
-          <div className="animate-fade-up">
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 dark:border-blue-500/30 bg-blue-50 dark:bg-blue-500/10 px-3.5 py-1.5 text-xs font-semibold text-blue-700 dark:text-blue-400 mb-6">
-              <span className="h-1.5 w-1.5 rounded-full bg-blue-600 animate-pulse" />
-              Multi-Hazard Intelligence Platform
-            </div>
-            <h1 className="text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] mb-5 text-slate-900 dark:text-slate-100">
-              Disaster Management for a Safer India
+        <div className="relative z-10 max-w-7xl mx-auto px-5 lg:px-8 pt-24 pb-12">
+          <div className="max-w-2xl text-white">
+            <h1 className="text-4xl lg:text-5xl font-bold tracking-tight leading-tight mb-5 drop-shadow-md">
+              Disaster Management<br />for a Safer India
             </h1>
-            <p className="text-lg text-slate-500 dark:text-slate-400 max-w-xl leading-relaxed mb-9">
-              A geospatial intelligence platform that brings together real-time hazard data, coordinated resources
-              and disaster preparedness and response planning — helping authorities see the risk, understand the
-              people affected, and move them safely.
+            <p className="text-lg text-blue-50 max-w-lg leading-relaxed mb-8 drop-shadow">
+              Integrated geospatial data, real-time information and coordinated resources for better preparedness, response and resilient communities.
             </p>
-            <div className="flex flex-wrap items-center gap-3.5 mb-10">
-              <Button size="lg" onClick={() => navigate('/role-select')}>
-                Login <ArrowRight size={18} />
-              </Button>
-              <Button variant="secondary" size="lg" onClick={() => navigate('/app/routes')}>
-                <PlayCircle size={18} /> View Live Demo
-              </Button>
-            </div>
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-400 dark:text-slate-500">
-              <PipelineChip text="HAZARD" />
-              <ArrowRight size={14} />
-              <PipelineChip text="PEOPLE" />
-              <ArrowRight size={14} />
-              <PipelineChip text="DECISION" />
-              <ArrowRight size={14} />
-              <PipelineChip text="SAFE MOVEMENT" />
+            {/* Decorative line */}
+            <div className="flex gap-1.5 mb-12">
+              <div className="h-1 w-6 bg-[#ff9933] rounded-full"></div>
+              <div className="h-1 w-6 bg-white rounded-full"></div>
+              <div className="h-1 w-6 bg-[#138808] rounded-full"></div>
             </div>
           </div>
 
-          <div className="relative animate-fade-up" style={{ animationDelay: '0.15s' }}>
-            <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-blue-600/10 to-cyan-400/10 blur-xl" />
-            <Card className="relative overflow-hidden aspect-[4/3] p-0">
-              <GeoMap
-                markers={[...habitations.slice(0, 4).map((h) => ({ id: h.id, type: 'habitation', position: h.position, label: h.name, priority: h.priority })), ...safeSites.slice(0, 3).map((s) => ({ id: s.id, type: 'site', position: s.position, label: s.name }))]}
-                hazardZones={hazardZones}
-                routes={[routeGeometry.A]}
-                interactive={false}
-              />
-              <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
-                <span className="glass-dark text-white text-xs font-semibold px-3 py-1.5 rounded-full">Live Risk Overview</span>
-                <span className="glass text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-full">{hazardZones.length} Active Hazard Zones</span>
-              </div>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Impact / statistics — real counts from the platform's own data */}
-      <section className="py-14 px-5 lg:px-8 bg-blue-700 dark:bg-blue-950">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-          <StatTile value={habitations.length} label="Habitations Monitored" />
-          <StatTile value={totalPopulationMonitored.toLocaleString()} label="Residents Covered" />
-          <StatTile value={safeSites.length} label="Safe Sites Ready" />
-          <StatTile value={responsePersonnel} label="Response Personnel" />
-        </div>
-      </section>
-
-      {/* Pipeline */}
-      <section id="resources" className="py-20 px-5 lg:px-8 bg-slate-950 text-white scroll-mt-16">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-14">
-            <h3 className="text-3xl font-bold mb-3">A Complete Decision Pipeline</h3>
-            <p className="text-slate-400 max-w-2xl mx-auto">
-              GEOSENTRA is more than a hazard map — it is the connective layer between long-term relocation
-              planning and split-second evacuation decisions.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-5 gap-4">
-            {pipeline.map((step, i) => (
-              <div key={step.n} className="relative animate-fade-up" style={{ animationDelay: `${i * 0.08}s` }}>
-                <div className="rounded-2xl bg-white/5 border border-white/10 p-5 h-full hover:bg-white/10 transition-colors">
-                  <div className="text-xs font-mono text-blue-400 mb-3">{step.n}</div>
-                  <step.icon size={22} className="text-cyan-400 mb-3" strokeWidth={2} />
-                  <div className="font-bold mb-1.5">{step.title}</div>
-                  <div className="text-sm text-slate-400 leading-snug">{step.desc}</div>
+          {/* Cards Section */}
+          <div className="grid md:grid-cols-2 gap-6 mt-4">
+            {/* Card 1: Disaster Authority */}
+            <div className="bg-[#153a6b] rounded-xl p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-xl hover:shadow-2xl transition-shadow group border border-[#1a4b85]">
+              <div className="flex items-center gap-5">
+                <div className="h-16 w-16 rounded-full bg-[#20508c] border border-blue-400/30 flex items-center justify-center shrink-0">
+                  <ShieldAlert size={28} className="text-white" strokeWidth={1.5} />
                 </div>
-                {i < pipeline.length - 1 && (
-                  <ArrowRight size={16} className="hidden md:block absolute top-1/2 -right-2.5 -translate-y-1/2 text-slate-600 z-10" />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* About / integration story */}
-      <section id="about" className="py-20 px-5 lg:px-8 scroll-mt-16">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-14">
-            <h3 className="text-3xl font-bold mb-3">The Value Is in the Integration</h3>
-            <p className="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
-              Hazard mapping already exists. What GEOSENTRA does differently is connect risk, people,
-              destinations and routing into one explainable, auditable system.
-            </p>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {integrations.map((item, i) => (
-              <Card key={item.title} hover className="p-6 animate-fade-up" style={{ animationDelay: `${i * 0.06}s` }}>
-                <div className="h-11 w-11 rounded-xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center mb-4">
-                  <item.icon size={20} className="text-blue-600 dark:text-blue-400" strokeWidth={2} />
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-1">Disaster Authority</h3>
+                  <div className="text-blue-200 text-sm mb-1.5">Risk Assessment, Monitoring & Response</div>
+                  <p className="text-blue-100 text-sm max-w-[280px] leading-relaxed">Access real-time data, issue alerts, coordinate response and manage disaster operations.</p>
                 </div>
-                <div className="font-bold text-slate-900 dark:text-slate-100 mb-1.5">{item.title}</div>
-                <div className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{item.desc}</div>
-              </Card>
-            ))}
+              </div>
+              <button 
+                onClick={() => navigate('/role-select')}
+                className="shrink-0 h-10 w-10 sm:w-auto sm:px-4 rounded-full bg-white text-[#153a6b] text-sm font-semibold flex items-center justify-center gap-2 group-hover:bg-blue-50 transition-colors mt-4 sm:mt-0"
+              >
+                <span className="hidden sm:inline">Access Portal</span> <ArrowRight size={18} />
+              </button>
+            </div>
+
+            {/* Card 2: Resource Provider */}
+            <div className="bg-white rounded-xl p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-xl hover:shadow-2xl transition-shadow group border border-slate-200">
+              <div className="flex items-center gap-5">
+                <div className="h-16 w-16 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
+                  <Building2 size={28} className="text-[#2e7d32]" strokeWidth={1.5} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900 mb-1">Resource & Infrastructure Provider</h3>
+                  <div className="text-slate-600 text-sm mb-1.5">Shelters, supplies and resource management</div>
+                  <p className="text-slate-500 text-sm max-w-[280px] leading-relaxed">Register resources, manage shelters, track availability and support relief operations.</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => navigate('/provider/login')}
+                className="shrink-0 h-10 w-10 sm:w-auto sm:px-4 rounded-full bg-[#2e7d32] text-white text-sm font-semibold flex items-center justify-center gap-2 group-hover:bg-[#1b5e20] transition-colors mt-4 sm:mt-0 shadow-sm"
+              >
+                <span className="hidden sm:inline">Access Portal</span> <ArrowRight size={18} />
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Entry points */}
-      <section className="py-20 px-5 lg:px-8 bg-gradient-to-b from-blue-50/60 dark:from-slate-900/60 to-white dark:to-slate-950">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-6">
-          <Card className="p-8">
-            <span className="text-xs font-bold tracking-wide text-blue-600 dark:text-blue-400 uppercase flex items-center gap-1.5">
-              <Radio size={13} /> Authority Login
-            </span>
-            <h4 className="text-2xl font-bold mt-2 mb-3 text-slate-900 dark:text-slate-100">Disaster Authority Intelligence</h4>
-            <p className="text-slate-500 dark:text-slate-400 leading-relaxed mb-5">
-              Identify high-risk habitations, evaluate relocation sites, calculate carrying capacity and
-              build phased, explainable relocation plans.
-            </p>
-            <Button variant="secondary" onClick={() => navigate('/role-select')}>
-              Authority Login <ArrowRight size={16} />
-            </Button>
-          </Card>
-          <Card className="p-8">
-            <span className="text-xs font-bold tracking-wide text-emerald-600 dark:text-emerald-400 uppercase flex items-center gap-1.5">
-              <Building2 size={13} /> Resource & Infrastructure Provider
-            </span>
-            <h4 className="text-2xl font-bold mt-2 mb-3 text-slate-900 dark:text-slate-100">Report Real Capacity Data</h4>
-            <p className="text-slate-500 dark:text-slate-400 leading-relaxed mb-5">
-              Hospitals, schools, shelters and community halls register separately and submit the capacity data
-              that feeds every safe-site recommendation above.
-            </p>
-            <Button variant="secondary" onClick={() => navigate('/provider/login')}>
-              Provider Login <ArrowRight size={16} />
-            </Button>
-          </Card>
-        </div>
-      </section>
-
-      <footer id="contact" className="py-12 px-5 lg:px-8 border-t border-slate-100 dark:border-slate-800 scroll-mt-16">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid sm:grid-cols-3 gap-8 mb-8">
-            <div>
-              <Brand size="sm" className="mb-3" />
-              <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-xs">
-                An intelligent multi-hazard platform for risk assessment, relocation planning and personalized
-                emergency navigation. Frontend prototype only.
+      {/* MOBILE APP SECTION */}
+      <section className="py-20 px-5 lg:px-8 mt-4">
+        <div className="max-w-7xl mx-auto rounded-3xl bg-[#f8fbff] shadow-sm border border-blue-50 overflow-hidden">
+          <div className="grid md:grid-cols-2 items-center">
+            <div className="p-10 md:p-12 relative flex justify-center">
+               <img src="/mobile_mockup.jpg" alt="GeoSentra Mobile App" className="w-full max-w-sm drop-shadow-2xl rounded-3xl" />
+            </div>
+            <div className="p-10 md:p-16 md:pl-0 flex flex-col justify-center">
+              <h2 className="text-3xl font-bold text-slate-900 mb-2">GeoSentra Mobile App</h2>
+              <p className="text-xl text-slate-600 mb-5">Safety at your fingertips.</p>
+              <p className="text-slate-500 mb-8 max-w-md leading-relaxed text-lg">
+                Get real-time alerts, report incidents, find nearby shelters and access emergency resources.
               </p>
-            </div>
-            <div id="support">
-              <div className="text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-3">Support</div>
-              <ul className="space-y-2 text-sm text-slate-500 dark:text-slate-400">
-                <li>Use the in-app Alerts and Report an Issue pages once logged in.</li>
-                <li>Emergency / SOS is available from the Citizen and Volunteer portals.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-3">Contact</div>
-              <ul className="space-y-2 text-sm text-slate-500 dark:text-slate-400">
-                <li className="flex items-center gap-2">
-                  <Mail size={14} className="shrink-0" /> support@geosentra.demo
-                </li>
-                <li className="flex items-center gap-2">
-                  <Phone size={14} className="shrink-0" /> Demo helpline — not a live number
-                </li>
-              </ul>
+              <div className="flex flex-wrap items-center gap-4">
+                {/* Simulated Google Play Badge */}
+                <button className="h-[52px] px-5 bg-black rounded-xl flex items-center gap-3 hover:bg-zinc-800 transition-colors">
+                  <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12,2C6.477,2,2,6.477,2,12c0,5.523,4.477,10,10,10s10-4.477,10-10C22,6.477,17.523,2,12,2z M15,13H9v-2h6V13z"/>
+                  </svg>
+                  <div className="flex flex-col items-start">
+                    <span className="text-[10px] text-zinc-300 leading-none mb-1">GET IT ON</span>
+                    <span className="text-sm font-semibold text-white leading-none">Google Play</span>
+                  </div>
+                </button>
+                {/* Simulated App Store Badge */}
+                <button className="h-[52px] px-5 bg-black rounded-xl flex items-center gap-3 hover:bg-zinc-800 transition-colors">
+                  <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14.94 5.19A4.38 4.38 0 0 0 16 2a4.34 4.34 0 0 0-3.32 1.7 4.14 4.14 0 0 0-1.09 3.12 4.29 4.29 0 0 0 3.35-1.63zM16.59 7c-2.09 0-3.33 1.25-4.42 1.25-1.07 0-2.31-1.21-4.04-1.21-1.74 0-3.33 1.24-4.28 3-1.8 3.32-.47 8.28 1.26 10.74C5.97 22.06 7.03 23 8.16 23c1.12 0 1.54-.7 3.52-.7s2.34.7 3.53.7c1.17 0 2.1-.88 2.94-2.12a10.82 10.82 0 0 0 1.29-2.73c-2.3-1.02-3.14-3.55-1.92-5.46 1-1.57 2.6-2.58 4.36-2.58-1-1.55-2.67-2.61-4.71-2.61z"/>
+                  </svg>
+                  <div className="flex flex-col items-start">
+                    <span className="text-[10px] text-zinc-300 leading-none mb-1">Download on the</span>
+                    <span className="text-sm font-semibold text-white leading-none">App Store</span>
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-400 dark:text-slate-500 pt-6 border-t border-slate-100 dark:border-slate-800">
-            <div className="flex items-center gap-2">
-              <Compass size={16} /> GEOSENTRA — Frontend Prototype
-            </div>
-            <div>Built for Smart India Hackathon 2026</div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="bg-[#112a46] py-7 px-5 lg:px-8 text-sm text-blue-200">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
+            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-white transition-colors">Terms of Use</a>
+            <a href="#" className="hover:text-white transition-colors">Accessibility</a>
+            <a href="#" className="hover:text-white transition-colors">Help</a>
+          </div>
+          <div className="font-semibold tracking-widest text-[11px] text-blue-100 uppercase">
+            SAFER COMMUNITIES. STRONGER TOMORROW.
           </div>
         </div>
       </footer>
-    </div>
-  )
-}
-
-function PipelineChip({ text }) {
-  return <span className="font-semibold text-slate-500 dark:text-slate-400 text-xs tracking-wide">{text}</span>
-}
-
-function StatTile({ value, label }) {
-  return (
-    <div>
-      <div className="text-3xl lg:text-4xl font-bold text-white mb-1">{value}</div>
-      <div className="text-xs font-semibold uppercase tracking-wide text-blue-200">{label}</div>
     </div>
   )
 }
