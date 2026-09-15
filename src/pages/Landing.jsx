@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import {
-  Search,
   ShieldAlert,
   Building2,
   ArrowRight,
@@ -38,27 +37,6 @@ export default function Landing() {
                 <span className="text-[11px] font-medium text-slate-500 leading-tight mt-1">Safer Communities. Stronger Tomorrow.</span>
               </div>
             </div>
-          </div>
-
-          <div className="flex items-center gap-5">
-            {/* Search Bar */}
-            <div className="relative hidden md:block">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search size={16} className="text-slate-400" />
-              </div>
-              <input
-                type="text"
-                placeholder="Search..."
-                className="pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64 transition-all"
-              />
-            </div>
-            {/* Login Button */}
-            <button
-              onClick={() => navigate('/role-select')}
-              className="px-6 py-2.5 bg-[#153a6b] hover:bg-[#112a46] text-white text-sm font-semibold rounded-lg transition-colors shadow-sm"
-            >
-              Login
-            </button>
           </div>
         </div>
       </header>
